@@ -353,11 +353,20 @@ class GearsetModal(discord.ui.Modal):
         thread = await root_msg.create_thread(name=f"Order - {self.recipient.value[:20]}")
         
         control_msg = await thread.send("Use the dashboard below to coordinate this craft.", view=OrderControlView())
-
+        
         crafter_role = discord.utils.get(guild.roles, name=CRAFTER_ROLE_NAME)
         role_ping = f"<@&{crafter_role.id}>" if crafter_role else ""
         ping_msg = await thread.send(f"{interaction.user.mention} {role_ping}")
         await ping_msg.delete()
+        
+        # Force-add all crafters to the thread so it sticks to their sidebar
+        if crafter_role:
+            for member in crafter_role.members:
+                if not member.bot: # Don't try to add other bots
+                    try:
+                        await thread.add_user(member)
+                    except Exception:
+                        pass
 
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
