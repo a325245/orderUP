@@ -3,6 +3,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 import aiohttp
+from aiohttp import web
 import base64
 import sqlite3
 import re
