@@ -15,7 +15,7 @@ load_dotenv()
 # ==========================================
 # CONFIGURATION & DATABASE
 # ==========================================
-CRAFTER_ROLE_NAME = "Crafter"
+CRAFTER_ROLE_NAME = "Hearthkeeper"
 XIVAPI_BASE = "https://v2.xivapi.com/api"
 
 # Lock file paths to the exact folder this python script is inside
@@ -152,7 +152,7 @@ GEARSET_DATABASE = {
     "Courtly Lover's Fending (WAR, PLD, GNB, DRK)": {
         "cost_type": "Mathematics Tomestones",
         "cost_amount": 1160,
-        "mats": "**16x** Turali Pigment\n**16x** Mastodon Pelt\n**16x** Double Duracoat\n**10x** Everkeep Resin",
+        "mats": "**16x** Turali Pigment\n**16x** Mastodon Pelt\n**16x** Double Duracoat\n**10x** Everkeep Resin\n(For full set only)",
         "exact_items": [
             (1, "Courtly Lover's Hairpin of Fending"), (1, "Courtly Lover's Surcoat of Fending"),
             (1, "Courtly Lover's Gauntlets of Fending"), (1, "Courtly Lover's Breeches of Fending"),
@@ -164,7 +164,7 @@ GEARSET_DATABASE = {
     "Courtly Lover's Maiming (DRG, RPR)": {
         "cost_type": "Mathematics Tomestones",
         "cost_amount": 1160,
-        "mats": "**16x** Turali Pigment\n**16x** Mastodon Pelt\n**16x** Double Duracoat\n**10x** Everkeep Resin",
+        "mats": "**16x** Turali Pigment\n**16x** Mastodon Pelt\n**16x** Double Duracoat\n**10x** Everkeep Resin\n(For full set only)",
         "exact_items": [
             (1, "Courtly Lover's Hairpin of Maiming"), (1, "Courtly Lover's Surcoat of Maiming"),
             (1, "Courtly Lover's Gauntlets of Maiming"), (1, "Courtly Lover's Breeches of Maiming"),
@@ -176,7 +176,7 @@ GEARSET_DATABASE = {
     "Courtly Lover's Striking (MNK, SAM)": {
         "cost_type": "Mathematics Tomestones",
         "cost_amount": 1160,
-        "mats": "**20x** Turali Pigment\n**16x** Mastodon Pelt\n**12x** Everkeep Resin\n**8x** Double Duracoat\n**2x** Insulating Varnish",
+        "mats": "**20x** Turali Pigment\n**16x** Mastodon Pelt\n**12x** Everkeep Resin\n**8x** Double Duracoat\n**2x** Insulating Varnish\n(For full set only)",
         "exact_items": [
             (1, "Courtly Lover's Temple Chain of Striking"), (1, "Courtly Lover's Cloak of Striking"),
             (1, "Courtly Lover's Armguards of Striking"), (1, "Courtly Lover's Brais of Striking"),
@@ -188,7 +188,7 @@ GEARSET_DATABASE = {
     "Courtly Lover's Aiming (DNC, BRD, MCH)": {
         "cost_type": "Mathematics Tomestones",
         "cost_amount": 1160,
-        "mats": "**18x** Turali Pigment\n**16x** Everkeep Resin\n**14x** Mastodon Pelt\n**8x** Double Duracoat\n**2x** Insulating Varnish",
+        "mats": "**18x** Turali Pigment\n**16x** Everkeep Resin\n**14x** Mastodon Pelt\n**8x** Double Duracoat\n**2x** Insulating Varnish\n(For full set only)",
         "exact_items": [
             (1, "Courtly Lover's Hairpin of Aiming"), (1, "Courtly Lover's Shirt of Aiming"),
             (1, "Courtly Lover's Halfgloves of Aiming"), (1, "Courtly Lover's Trousers of Aiming"),
@@ -200,7 +200,7 @@ GEARSET_DATABASE = {
     "Courtly Lover's Scouting (NIN, VPR)": {
         "cost_type": "Mathematics Tomestones",
         "cost_amount": 1160,
-        "mats": "**18x** Turali Pigment\n**16x** Everkeep Resin\n**14x** Mastodon Pelt\n**8x** Double Duracoat\n**2x** Insulating Varnish",
+        "mats": "**18x** Turali Pigment\n**16x** Everkeep Resin\n**14x** Mastodon Pelt\n**8x** Double Duracoat\n**2x** Insulating Varnish\n(For full set only)",
         "exact_items": [
             (1, "Courtly Lover's Hairpin of Scouting"), (1, "Courtly Lover's Shirt of Scouting"),
             (1, "Courtly Lover's Halfgloves of Scouting"), (1, "Courtly Lover's Trousers of Scouting"),
@@ -212,7 +212,7 @@ GEARSET_DATABASE = {
     "Courtly Lover's Healing (WHM, AST, SCH, SGE)": {
         "cost_type": "Mathematics Tomestones",
         "cost_amount": 1160,
-        "mats": "**20x** Turali Pigment\n**16x** Mastodon Pelt\n**10x** Everkeep Resin\n**10x** Double Duracoat\n**2x** Insulating Varnish",
+        "mats": "**20x** Turali Pigment\n**16x** Mastodon Pelt\n**10x** Everkeep Resin\n**10x** Double Duracoat\n**2x** Insulating Varnish\n(For full set only)",
         "exact_items": [
             (1, "Courtly Lover's Hood of Healing"), (1, "Courtly Lover's Longcoat of Healing"),
             (1, "Courtly Lover's Gloves of Healing"), (1, "Courtly Lover's Pantaloons of Healing"),
@@ -224,7 +224,7 @@ GEARSET_DATABASE = {
     "Courtly Lover's Casting (BLM, SMN, RDM, PCT)": {
         "cost_type": "Mathematics Tomestones",
         "cost_amount": 1160,
-        "mats": "**20x** Turali Pigment\n**16x** Mastodon Pelt\n**10x** Everkeep Resin\n**10x** Double Duracoat\n**2x** Insulating Varnish",
+        "mats": "**20x** Turali Pigment\n**16x** Mastodon Pelt\n**10x** Everkeep Resin\n**10x** Double Duracoat\n**2x** Insulating Varnish\n(For full set only)",
         "exact_items": [
             (1, "Courtly Lover's Hood of Casting"), (1, "Courtly Lover's Longcoat of Casting"),
             (1, "Courtly Lover's Gloves of Casting"), (1, "Courtly Lover's Pantaloons of Casting"),
@@ -236,7 +236,7 @@ GEARSET_DATABASE = {
     "Crested Crafting (All Crafters)": {
         "cost_type": "Variable Scrips",
         "cost_amount": "N/A",
-        "mats": "**12x** Shaaloani Coke\n**14x** Neo Abrasive\n**27x** Mason's Abrasive\n**20x** Hydrophobic Preservative\n**32x** Diatryma Pelt\n**16x** Cronopio Skin\n**27x** Condensed Solution",
+        "mats": "**12x** Shaaloani Coke\n**14x** Neo Abrasive\n**27x** Mason's Abrasive\n**20x** Hydrophobic Preservative\n**32x** Diatryma Pelt\n**16x** Cronopio Skin\n**27x** Condensed Solution\n(For full set only)",
         "exact_items": [
             (1, "Crested Cap of Crafting"), (1, "Crested Coat of Crafting"), (1, "Crested Gloves of Crafting"),
             (1, "Crested Hose of Crafting"), (1, "Crested Shoes of Crafting"), (1, "Crested Earrings of Crafting"),
@@ -246,7 +246,7 @@ GEARSET_DATABASE = {
     "Crested Gathering (All Gatherers)": {
         "cost_type": "Variable Scrips",
         "cost_amount": "N/A",
-        "mats": "**16x** Shaaloani Coke\n**8x** Neo Abrasive\n**27x** Mason's Abrasive\n**20x** Hydrophobic Preservative\n**30x** Diatryma Pelt\n**22x** Cronopio Skin\n**27x** Condensed Solution",
+        "mats": "**16x** Shaaloani Coke\n**8x** Neo Abrasive\n**27x** Mason's Abrasive\n**20x** Hydrophobic Preservative\n**30x** Diatryma Pelt\n**22x** Cronopio Skin\n**27x** Condensed Solution\n(For full set only)",
         "exact_items": [
             (1, "Crested Cap of Gathering"), (1, "Crested Coat of Gathering"), (1, "Crested Halfgloves of Gathering"),
             (1, "Crested Bottoms of Gathering"), (1, "Crested Boots of Gathering"), (1, "Crested Earrings of Gathering"),
@@ -332,7 +332,7 @@ class GearsetModal(discord.ui.Modal):
             combined_mats.append(f"**Weapon/Tool:**\n*(Weapon mats must be calculated manually)*")
 
         if self.notes_input.value.strip():
-            items_summary_str += f"\n\n*📝 Notes: {self.notes_input.value.strip()}*"
+            items_summary_str += f"\n\n* Notes: {self.notes_input.value.strip()}*"
 
         guild = interaction.guild
         active_orders_channel = discord.utils.get(guild.text_channels, name="open-orders")
@@ -347,7 +347,7 @@ class GearsetModal(discord.ui.Modal):
         if tc_url:
             embed.add_field(name="Teamcraft Link", value=f"[🛠️ Open Recipe List]({tc_url})", inline=False)
             
-        embed.add_field(name=f"💎 Total Base Cost: {total_cost} {cost_type}", value="\n\n".join(combined_mats), inline=False)
+        embed.add_field(name=f" Total Base Cost: {total_cost} {cost_type}", value="\n\n".join(combined_mats), inline=False)
 
         root_msg = await active_orders_channel.send(embed=embed)
         thread = await root_msg.create_thread(name=f"Order - {self.recipient.value[:20]}")
@@ -366,11 +366,11 @@ class GearsetModal(discord.ui.Modal):
         conn.commit()
         conn.close()
 
-        await interaction.followup.send("✅ Order perfectly routed to `#open-orders` with Teamcraft link attached!", ephemeral=True)
+        await interaction.followup.send("✅ Order sent to `#open-orders` !", ephemeral=True)
 
 
 class OrderModal(discord.ui.Modal, title="Bulk Crafting Request"):
-    items_input = discord.ui.TextInput(label="Items Needed (Qty Item Name OR TC Link)", style=discord.TextStyle.paragraph, placeholder="Example:\n1x Courtly Lovers Brush\nOR just paste a Teamcraft link!", required=True)
+    items_input = discord.ui.TextInput(label="Items Needed (Qty Item Name OR TC Link)", style=discord.TextStyle.paragraph, placeholder="Example:\n1x Courtly Lovers Filbert Brush\nOR just paste a Teamcraft link!", required=True)
     recipient = discord.ui.TextInput(label="Who is this for?", placeholder="Character Name", required=True)
 
     async def on_submit(self, interaction: discord.Interaction):
@@ -472,7 +472,7 @@ class OrderModal(discord.ui.Modal, title="Bulk Crafting Request"):
         conn.commit()
         conn.close()
 
-        await interaction.followup.send("✅ Bulk order submitted successfully!", ephemeral=True)
+        await interaction.followup.send("✅ Order submitted successfully!", ephemeral=True)
 
 
 class RequestOrderView(discord.ui.View):
@@ -480,7 +480,7 @@ class RequestOrderView(discord.ui.View):
         super().__init__(timeout=None)
 
     @discord.ui.select(
-        placeholder="🛡️ Select a Full Gearset to Order...",
+        placeholder=" Select a Full Gearset to Order...",
         custom_id="gearset_select",
         row=0,
         options=[
@@ -491,15 +491,15 @@ class RequestOrderView(discord.ui.View):
             discord.SelectOption(label="Courtly Lover's Aiming (DNC, BRD, MCH)"),
             discord.SelectOption(label="Courtly Lover's Casting (BLM, SMN, RDM, PCT)"),
             discord.SelectOption(label="Courtly Lover's Healing (WHM, AST, SCH, SGE)"),
-            discord.SelectOption(label="Crested Crafting (All Crafters)"),
-            discord.SelectOption(label="Crested Gathering (All Gatherers)")
+            discord.SelectOption(label="Crested Crafting (lvl 100 Crafters)"),
+            discord.SelectOption(label="Crested Gathering (lvl 100 Gatherers)")
         ]
     )
     async def gearset_dropdown(self, interaction: discord.Interaction, select: discord.ui.Select):
         selected_set = select.values[0]
         await interaction.response.send_modal(GearsetModal(selected_set))
 
-    @discord.ui.button(label="Bulk Paste Order ➕", style=discord.ButtonStyle.primary, custom_id="open_order_modal", row=1)
+    @discord.ui.button(label="Place Order ➕", style=discord.ButtonStyle.primary, custom_id="open_order_modal", row=1)
     async def place_order(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(OrderModal())
 
@@ -618,7 +618,7 @@ class OrderControlView(discord.ui.View):
                 if status == "Completed":
                     try:
                         requester = await guild.fetch_member(requester_id)
-                        await requester.send(f"✅ Your crafting order for **{recipient}** has been completed by {interaction.user.name}!")
+                        await requester.send(f"✅ Your crafting order has been completed by {interaction.user.name}!")
                     except: pass
                 
                 # Safely delete the thread, then delete the root message
@@ -714,7 +714,7 @@ async def ordersetup(ctx):
 
     embed = discord.Embed(
         title="🏛️ Crafting Logistics Depot",
-        description="Need items manufactured? You can order in three ways:\n\n**Option 1: Full Gearset**\nUse the `Select a Full Gearset` dropdown menu below to quickly request a full tier set with auto-calculated materials.\n\n**Option 2: The Bulk Board**\nClick `Bulk Paste Order` to paste a list of custom items or a Teamcraft link.\n\n**Option 3: The /order Command**\nType `/order` anywhere to quickly lookup a specific item using autocomplete!",
+        description="Need items manufactured? You can order in three ways:\n\n**Option 1: Full Gearset**\nUse the `Select a Full Gearset` dropdown menu below to quickly request a full tier set with auto-calculated materials.\n\n**Option 2: The Bulk Board**\nClick `Place Order` to paste a list of custom items or a Teamcraft link.\n\n**Option 3: The /order Command**\nType `/order` anywhere to quickly lookup a specific item using autocomplete!",
         color=discord.Color.purple()
     )
     await orders_channel.send(embed=embed, view=RequestOrderView())
@@ -727,7 +727,7 @@ async def ordersetup(ctx):
 async def order_single(interaction: discord.Interaction, item_name: str, quantity: int = 1):
     await interaction.response.defer(ephemeral=True)
     
-    # Automatically set the recipient to the person who ran the command!
+    # Automatically set the recipient to the person who ran the command
     recipient = interaction.user.display_name
     
     item_id = None
@@ -786,7 +786,7 @@ async def order_single(interaction: discord.Interaction, item_name: str, quantit
     conn.commit()
     conn.close()
 
-    await interaction.followup.send(f"✅ Your order for {quantity}x {official_name} has been routed to `#open-orders`!", ephemeral=True)
+    await interaction.followup.send(f"✅ Your order for {quantity}x {official_name} has been sent to `#open-orders`!", ephemeral=True)
 
 @order_single.autocomplete("item_name")
 async def item_autocomplete(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
