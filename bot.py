@@ -263,19 +263,18 @@ class CraftingBot(commands.Bot):
 
     async def setup_hook(self):
         # Create a tiny background web server to satisfy Render's port requirement
-        app = aiohttp.web.Application()
-        app.router.add_get('/', lambda request: aiohttp.web.Response(text="Bot is alive!"))
-        runner = aiohttp.web.AppRunner(app)
+        app = web.Application()
+        app.router.add_get('/', lambda request: web.Response(text="Bot is alive!"))
+        runner = web.AppRunner(app)
         await runner.setup()
         
         # Render automatically provides a PORT environment variable
-        port = int(os.environ.get("PORT", 8080))
-        site = aiohttp.web.TCPSite(runner, '0.0.0.0', port)
+        port = int(os.environ.get("PORT", 10000))
+        site = web.TCPSite(runner, '0.0.0.0', port)
         await site.start()
         print(f"🌐 Dummy web server listening on port {port} to keep Render happy!")
 
 bot = CraftingBot()
-
 # ==========================================
 # MODALS & VIEWS
 # ==========================================
