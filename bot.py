@@ -17,7 +17,7 @@ load_dotenv()
 # Fallback Configuration Token Slot
 TOKEN = os.environ.get("DISCORD_TOKEN")
 if not TOKEN or TOKEN == "your_bot_token_here":
-    TOKEN = "for local tests :3"
+    TOKEN = "for local testing only :3"
 
 CRAFTER_ROLE_NAME = "Hearthkeepers"
 XIVAPI_BASE = "https://v2.xivapi.com/api"
@@ -150,7 +150,7 @@ async def rebuild_database(bot):
 
 def load_gear_data():
     try:
-        with open(JSON_PATH, "r") as f:
+        with open(JSON_PATH, "r", encoding='utf-8') as f:
             return json.load(f)
     except FileNotFoundError:
         print(f"⚠️ WARNING: {JSON_PATH} not found!")
@@ -184,14 +184,19 @@ def validate_database_schema(data):
         if not isinstance(gs_data["materials_per_piece"], dict): 
             return f"'{gs_name}' -> 'materials_per_piece' must be an object {{}}."
             
+        # Future-proof check: ensuring explicit names exist
+        for piece, p_data in gs_data["materials_per_piece"].items():
+            if not isinstance(p_data, dict) or "mats" not in p_data or "name" not in p_data:
+                return f"Piece '{piece}' in '{gs_name}' must contain explicit 'name' and 'mats'."
+            
     if not isinstance(data["weapons"], dict): 
         return "'weapons' must be an object {} mapping jobs to weapon data."
         
     for job, w_data in data["weapons"].items():
         if "has_offhand" not in w_data or not isinstance(w_data["has_offhand"], bool):
             return f"Job '{job}' must have a true/false 'has_offhand' value."
-        if "mats_mh" not in w_data: 
-            return f"Job '{job}' is missing its main hand materials ('mats_mh')."
+        if "mats_mh" not in w_data or "name_mh" not in w_data: 
+            return f"Job '{job}' is missing main hand data ('mats_mh' or 'name_mh')."
             
     return None
 
@@ -277,7 +282,6 @@ class OrderModal(discord.ui.Modal, title="Bulk Crafting Request"):
     recipient = discord.ui.TextInput(label="Who is this for?", placeholder="Character Name", required=True)
 
     async def on_submit(self, interaction: discord.Interaction):
-        # 1. INSTANT ACKNOWLEDGMENT: This beats the 3-second clock!
         await interaction.response.edit_message(content="⏳ Calculating materials and assembling your order...", embed=None, view=None)
 
         lines = self.items_input.value.strip().split('\n')
@@ -371,7 +375,6 @@ class OrderModal(discord.ui.Modal, title="Bulk Crafting Request"):
         conn.commit()
         conn.close()
 
-        # 2. FINAL UPDATE: Change the loading text to the success message
         await interaction.edit_original_response(content=f"✅ Bulk order sent to <#{active_orders_channel.id}>! You can now dismiss this message.")
 
 # ==========================================
@@ -382,7 +385,7 @@ class OrderWizardView(discord.ui.View):
         super().__init__(timeout=300)
         options = []
         for name, data in GEAR_DB.get("gearsets", {}).items():
-            options.append(discord.SelectOption(label=name, description=f"Uses {data['currency']}"))
+            options.append(discord.SelectOption(label=name, description=f"Uses {data.get('currency', 'Materials')}"))
             
         if not options:
             options.append(discord.SelectOption(label="Error: No Data Loaded", value="error"))
@@ -466,8 +469,9 @@ class JobDropdown(discord.ui.Select):
         options = []
         for job in jobs:
             w_data = GEAR_DB["weapons"].get(job, {})
-            job_name = w_data.get("name", job) if w_data else job
-            options.append(discord.SelectOption(label=job, description=job_name))
+            # Read the explicit full name from the new JSON format!
+            job_name = w_data.get("name_mh", job) if w_data else job
+            options.append(discord.SelectOption(label=job, description=job_name[:100]))
             
         super().__init__(placeholder="Select associated weapons/tools...", min_values=0, max_values=len(options), options=options)
 
@@ -532,8 +536,9 @@ class FinalizeOrderModal(discord.ui.Modal):
                 total_mats[mat_name] = total_mats.get(mat_name, 0) + (qty * multiplier)
 
         for piece in self.pieces:
-            piece_mats = set_data["materials_per_piece"].get(piece, {})
-            add_mats(piece_mats, multiplier=max(1, len(self.jobs)))
+            piece_data = set_data["materials_per_piece"].get(piece, {})
+            # Target the inner 'mats' dictionary mapping created by the future-proof scraper
+            add_mats(piece_data.get("mats", {}), multiplier=max(1, len(self.jobs)))
             
         for job in self.jobs:
             w_data = GEAR_DB["weapons"].get(job, {})
@@ -549,36 +554,67 @@ class FinalizeOrderModal(discord.ui.Modal):
         if not mats_display:
             mats_display = "*No base materials required.*"
             
-        # We now return the raw dictionary (total_mats) so we can look up the IDs!
-        return mats_display, cost_type, total_mats
+        return mats_display, cost_type
 
     async def on_submit(self, interaction: discord.Interaction):
-        # 1. INSTANT ACKNOWLEDGMENT: This beats the 3-second clock!
         await interaction.response.edit_message(content="⏳ Calculating materials and assembling your order...", embed=None, view=None)
 
         guild = interaction.guild
-        mats_list, currency, raw_mats = await self.os_calculation_engine()
+        mats_list, currency = await self.os_calculation_engine()
         
-        # --- TEAMCRAFT LINK GENERATOR FOR GEARSETS ---
+        # --- NEW FUTURE-PROOF TEAMCRAFT LINK GENERATOR ---
         tc_payload = []
-        if raw_mats:
-            async with aiohttp.ClientSession(headers=HEADERS) as session:
-                for mat_name, qty in raw_mats.items():
-                    try:
-                        safe_name = mat_name.replace('"', '')
-                        params = {"sheets": "Item", "query": f'Name~"{safe_name}"', "limit": "1"}
-                        async with session.get(f"{XIVAPI_BASE}/search", params=params, timeout=2) as resp:
-                            if resp.status == 200:
-                                data = await resp.json()
-                                results = data.get('results', [])
-                                if results:
-                                    item_id = results[0].get('row_id')
-                                    tc_payload.append((item_id, qty))
-                    except Exception:
-                        pass
+        items_to_find = []
+        set_data = GEAR_DB["gearsets"][self.gearset]
+        multiplier = max(1, len(self.jobs))
         
+        # 1. Grab Explicit Armor Names
+        for piece in self.pieces:
+            piece_data = set_data["materials_per_piece"].get(piece, {})
+            if "name" in piece_data:
+                items_to_find.append((piece_data["name"], multiplier))
+            
+        # 2. Grab Explicit Weapon Names
+        for job in self.jobs:
+            w_data = GEAR_DB["weapons"].get(job, {})
+            if not w_data: continue
+            
+            if self.tool_scope in ["both", "mh"] and "name_mh" in w_data:
+                items_to_find.append((w_data["name_mh"], 1))
+                
+            if self.tool_scope in ["both", "oh"] and w_data.get("has_offhand", False) and "name_oh" in w_data:
+                items_to_find.append((w_data["name_oh"], 1))
+
+        # 3. Search XIVAPI using the explicit names
+        async with aiohttp.ClientSession(headers=HEADERS) as session:
+            for exact_name, qty in items_to_find:
+                try:
+                    safe_name = exact_name.replace('"', '')
+                    clean_search = re.sub(r"[^\w\s]", "", safe_name)
+                    
+                    params_exact = {"sheets": "Item", "query": f'Name~"{safe_name}"', "limit": "1"}
+                    params_fuzzy = {"sheets": "Item", "query": clean_search, "limit": "1"}
+                    
+                    item_id = None
+                    
+                    # Pass 1: Exact Match
+                    async with session.get(f"{XIVAPI_BASE}/search", params=params_exact, timeout=2) as resp:
+                        data = await resp.json() if resp.status == 200 else {}
+                        if data.get('results'): item_id = data['results'][0].get('row_id')
+                    
+                    # Pass 2: Fuzzy Match
+                    if not item_id and clean_search != safe_name:
+                        async with session.get(f"{XIVAPI_BASE}/search", params=params_fuzzy, timeout=2) as resp:
+                            data = await resp.json() if resp.status == 200 else {}
+                            if data.get('results'): item_id = data['results'][0].get('row_id')
+                            
+                    if item_id:
+                        tc_payload.append((item_id, qty))
+                except Exception:
+                    pass
+                    
         tc_url = generate_teamcraft_url(tc_payload) if tc_payload else None
-        # ---------------------------------------------
+        # -------------------------------------------------------
 
         receipt_embed = discord.Embed(title=f"🆕 New Order: {self.gearset}", color=discord.Color.green())
         receipt_embed.add_field(name="Recipient Target", value=self.recipient.value, inline=False)
@@ -597,7 +633,6 @@ class FinalizeOrderModal(discord.ui.Modal):
             
         receipt_embed.add_field(name=f"📦 Required Materials ({currency})", value=mats_list, inline=False)
         
-        # Add the dynamically generated Teamcraft Link to the embed!
         if tc_url:
             receipt_embed.add_field(name="Teamcraft Link", value=f"[🛠️ Open Recipe List]({tc_url})", inline=False)
             
@@ -620,13 +655,11 @@ class FinalizeOrderModal(discord.ui.Modal):
         
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
-        # Save the TC URL to the database for this gearset order
         cursor.execute("INSERT INTO orders (control_message_id, root_message_id, requester_id, items_summary, recipient, tc_url) VALUES (?, ?, ?, ?, ?, ?)",
                        (control_msg.id, base_message.id, interaction.user.id, mats_list, self.recipient.value, tc_url))
         conn.commit()
         conn.close()
 
-        # 2. FINAL UPDATE: Change the loading text to the success message
         await interaction.edit_original_response(content=f"✅ Order successfully logged to <#{active_orders_channel.id}>! You can now dismiss this message.")
 
 # ==========================================
@@ -637,7 +670,6 @@ class CartCheckoutModal(discord.ui.Modal, title="Checkout Cart"):
     notes = discord.ui.TextInput(label="Special Requests / Exceptions", style=discord.TextStyle.paragraph, required=False)
 
     async def on_submit(self, interaction: discord.Interaction):
-        # 1. INSTANT ACKNOWLEDGMENT: Beats the 3-second clock!
         await interaction.response.edit_message(content="⏳ Assembling your cart and pushing to logistics...", embed=None, view=None)
 
         user_data = USER_CARTS.get(interaction.user.id, {})
@@ -689,7 +721,6 @@ class CartCheckoutModal(discord.ui.Modal, title="Checkout Cart"):
 
         USER_CARTS.pop(interaction.user.id, None)
         
-        # 2. FINAL UPDATE: Change the loading text to the success message
         await interaction.edit_original_response(content=f"✅ Cart successfully ordered to <#{active_orders_channel.id}>! You can now dismiss this message.")
 
 class CartView(discord.ui.View):
@@ -919,7 +950,6 @@ async def update_gearsets(interaction: discord.Interaction, file: discord.Attach
     # -----------------------------------------
     raw_data = await file.read()
     
-    # LAYER 1: Syntax Check
     try:
         new_db = json.loads(raw_data.decode('utf-8'))
     except json.JSONDecodeError as e:
@@ -929,7 +959,6 @@ async def update_gearsets(interaction: discord.Interaction, file: discord.Attach
         await interaction.followup.send("❌ **Encoding Error!** Please make sure the file is saved as UTF-8.")
         return
 
-    # LAYERS 2 & 3: Skeleton and Deep Dive Check
     error_msg = validate_database_schema(new_db)
     if error_msg:
         await interaction.followup.send(f"❌ **Schema Error!** The file is valid JSON, but it failed inspection:\n**{error_msg}**")
@@ -974,11 +1003,9 @@ async def slash_order(interaction: discord.Interaction, item_name: str, quantity
             except Exception:
                 pass
         
-    # --- UPGRADED CART ADDITION LOGIC ---
     if interaction.user.id not in USER_CARTS:
         USER_CARTS[interaction.user.id] = {"items": [], "last_interaction": None}
         
-    # Attempt to silently delete the previous ephemeral cart message to prevent stacking
     old_interaction = USER_CARTS[interaction.user.id].get("last_interaction")
     if old_interaction:
         try:
@@ -992,7 +1019,6 @@ async def slash_order(interaction: discord.Interaction, item_name: str, quantity
         "id": item_id
     })
     
-    # Save this exact interaction so we can delete it next time!
     USER_CARTS[interaction.user.id]["last_interaction"] = interaction
     
     cart_items = USER_CARTS[interaction.user.id]["items"]
@@ -1013,10 +1039,8 @@ async def item_autocomplete(interaction: discord.Interaction, current: str) -> l
     safe_current = current.replace('"', '')
     
     params_exact = {"sheets": "Item", "query": f'Name~"{safe_current}"', "limit": "15"}
-    
     clean_search = re.sub(r"[^\w\s]", "", safe_current)
     params_fuzzy = {"sheets": "Item", "query": clean_search, "limit": "15"}
-    
     wildcard_query = " ".join([f"*{word}*" for word in clean_search.split()])
     params_wildcard = {"sheets": "Item", "query": wildcard_query, "limit": "15"}
     
