@@ -1,444 +1,4 @@
 {
-    "gearsets": {
-        "Courtly Lover's Fending": {
-            "currency": "Mathematics Tomestones",
-            "materials_per_piece": {
-                "Head": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Everkeep Resin": 1
-                },
-                "Body": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Hands": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Legs": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Feet": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Earrings": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Necklace": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Wristlet": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Ring": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                }
-            }
-        },
-        "Courtly Lover's Maiming": {
-            "currency": "Mathematics Tomestones",
-            "materials_per_piece": {
-                "Head": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Everkeep Resin": 1
-                },
-                "Body": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Hands": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Legs": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Feet": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Earrings": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Necklace": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Wristlet": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Ring": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                }
-            }
-        },
-        "Courtly Lover's Striking": {
-            "currency": "Mathematics Tomestones",
-            "materials_per_piece": {
-                "Head": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Everkeep Resin": 1
-                },
-                "Body": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Hands": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Legs": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Feet": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Earrings": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Necklace": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Wristlet": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Ring": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                }
-            }
-        },
-        "Courtly Lover's Scouting": {
-            "currency": "Mathematics Tomestones",
-            "materials_per_piece": {
-                "Head": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Everkeep Resin": 1
-                },
-                "Body": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Hands": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Legs": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Feet": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Earrings": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Necklace": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Wristlet": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Ring": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                }
-            }
-        },
-        "Courtly Lover's Aiming": {
-            "currency": "Mathematics Tomestones",
-            "materials_per_piece": {
-                "Head": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Everkeep Resin": 1
-                },
-                "Body": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Hands": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Legs": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Feet": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Earrings": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Necklace": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Wristlet": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Ring": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                }
-            }
-        },
-        "Courtly Lover's Casting": {
-            "currency": "Mathematics Tomestones",
-            "materials_per_piece": {
-                "Head": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Everkeep Resin": 1
-                },
-                "Body": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Hands": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Legs": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Feet": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Earrings": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Necklace": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Wristlet": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Ring": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                }
-            }
-        },
-        "Courtly Lover's Healing": {
-            "currency": "Mathematics Tomestones",
-            "materials_per_piece": {
-                "Head": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Everkeep Resin": 1
-                },
-                "Body": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Hands": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Legs": {
-                    "Turali Pigment": 3,
-                    "Mastodon Pelt": 3,
-                    "Double Duracoat": 2,
-                    "Everkeep Resin": 1
-                },
-                "Feet": {
-                    "Turali Pigment": 2,
-                    "Mastodon Pelt": 2,
-                    "Double Duracoat": 1
-                },
-                "Earrings": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Necklace": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Wristlet": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                },
-                "Ring": {
-                    "Turali Pigment": 1,
-                    "Insulating Varnish": 1
-                }
-            }
-        },
-        "Crested Crafting": {
-            "currency": "Scrips",
-            "materials_per_piece": {
-                "Head": {
-                    "Shaaloani Coke": 2,
-                    "Neo Abrasive": 2,
-                    "Diatryma Pelt": 2,
-                    "Condensed Solution": 1
-                },
-                "Body": {
-                    "Shaaloani Coke": 3,
-                    "Neo Abrasive": 3,
-                    "Diatryma Pelt": 3,
-                    "Condensed Solution": 2
-                },
-                "Hands": {
-                    "Shaaloani Coke": 2,
-                    "Neo Abrasive": 2,
-                    "Diatryma Pelt": 2,
-                    "Condensed Solution": 1
-                },
-                "Legs": {
-                    "Shaaloani Coke": 3,
-                    "Neo Abrasive": 3,
-                    "Diatryma Pelt": 3,
-                    "Condensed Solution": 2
-                },
-                "Feet": {
-                    "Shaaloani Coke": 2,
-                    "Neo Abrasive": 2,
-                    "Diatryma Pelt": 2,
-                    "Condensed Solution": 1
-                },
-                "Earrings": {
-                    "Shaaloani Coke": 1,
-                    "Hydrophobic Preservative": 1
-                },
-                "Necklace": {
-                    "Shaaloani Coke": 1,
-                    "Hydrophobic Preservative": 1
-                },
-                "Wristlet": {
-                    "Shaaloani Coke": 1,
-                    "Hydrophobic Preservative": 1
-                },
-                "Ring": {
-                    "Shaaloani Coke": 1,
-                    "Hydrophobic Preservative": 1
-                }
-            }
-        },
-        "Crested Gathering": {
-            "currency": "Scrips",
-            "materials_per_piece": {
-                "Head": {
-                    "Shaaloani Coke": 2,
-                    "Neo Abrasive": 2,
-                    "Cronopio Skin": 2,
-                    "Condensed Solution": 1
-                },
-                "Body": {
-                    "Shaaloani Coke": 3,
-                    "Neo Abrasive": 3,
-                    "Cronopio Skin": 3,
-                    "Condensed Solution": 2
-                },
-                "Hands": {
-                    "Shaaloani Coke": 2,
-                    "Neo Abrasive": 2,
-                    "Cronopio Skin": 2,
-                    "Condensed Solution": 1
-                },
-                "Legs": {
-                    "Shaaloani Coke": 3,
-                    "Neo Abrasive": 3,
-                    "Cronopio Skin": 3,
-                    "Condensed Solution": 2
-                },
-                "Feet": {
-                    "Shaaloani Coke": 2,
-                    "Neo Abrasive": 2,
-                    "Cronopio Skin": 2,
-                    "Condensed Solution": 1
-                },
-                "Earrings": {
-                    "Shaaloani Coke": 1,
-                    "Hydrophobic Preservative": 1
-                },
-                "Necklace": {
-                    "Shaaloani Coke": 1,
-                    "Hydrophobic Preservative": 1
-                },
-                "Wristlet": {
-                    "Shaaloani Coke": 1,
-                    "Hydrophobic Preservative": 1
-                },
-                "Ring": {
-                    "Shaaloani Coke": 1,
-                    "Hydrophobic Preservative": 1
-                }
-            }
-        }
-    },
     "job_mappings": {
         "Fending": [
             "PLD",
@@ -446,28 +6,28 @@
             "DRK",
             "GNB"
         ],
-        "Maiming": [
-            "DRG",
-            "RPR"
-        ],
-        "Striking": [
-            "MNK",
-            "SAM"
-        ],
-        "Aiming": [
-            "BRD",
-            "MCH",
-            "DNC"
-        ],
-        "Scouting": [
-            "NIN",
-            "VPR"
-        ],
         "Healing": [
             "WHM",
             "SCH",
             "AST",
             "SGE"
+        ],
+        "Striking": [
+            "MNK",
+            "SAM"
+        ],
+        "Maiming": [
+            "DRG",
+            "RPR"
+        ],
+        "Scouting": [
+            "NIN",
+            "VPR"
+        ],
+        "Aiming": [
+            "BRD",
+            "MCH",
+            "DNC"
         ],
         "Casting": [
             "BLM",
@@ -491,330 +51,1010 @@
             "FSH"
         ]
     },
+    "gearsets": {
+        "Courtly Lover's Fending": {
+            "currency": "Aesthetics",
+            "materials_per_piece": {
+                "Hairpin": {
+                    "name": "Courtly Lover's Hairpin of Fending",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Turali Pigment": 4
+                    }
+                },
+                "Surcoat": {
+                    "name": "Courtly Lover's Surcoat of Fending",
+                    "mats": {
+                        "Double Duracoat": 4,
+                        "Turali Pigment": 6
+                    }
+                },
+                "Gauntlets": {
+                    "name": "Courtly Lover's Gauntlets of Fending",
+                    "mats": {
+                        "Double Duracoat": 4,
+                        "Mastodon Pelt": 2
+                    }
+                },
+                "Breeches": {
+                    "name": "Courtly Lover's Breeches of Fending",
+                    "mats": {
+                        "Mastodon Pelt": 10,
+                        "Turali Pigment": 2
+                    }
+                },
+                "Boots": {
+                    "name": "Courtly Lover's Boots of Fending",
+                    "mats": {
+                        "Mastodon Pelt": 4,
+                        "Turali Pigment": 2
+                    }
+                },
+                "Earrings": {
+                    "name": "Courtly Lover's Earrings of Fending",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Choker": {
+                    "name": "Courtly Lover's Choker of Fending",
+                    "mats": {
+                        "Turali Pigment": 2,
+                        "Mastodon Pelt": 2
+                    }
+                },
+                "Wristlet": {
+                    "name": "Courtly Lover's Wristlet of Fending",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Ring": {
+                    "name": "Courtly Lover's Ring of Fending",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                }
+            }
+        },
+        "Courtly Lover's Maiming": {
+            "currency": "Aesthetics",
+            "materials_per_piece": {
+                "Hairpin": {
+                    "name": "Courtly Lover's Hairpin of Maiming",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Turali Pigment": 4
+                    }
+                },
+                "Surcoat": {
+                    "name": "Courtly Lover's Surcoat of Maiming",
+                    "mats": {
+                        "Double Duracoat": 4,
+                        "Turali Pigment": 6
+                    }
+                },
+                "Gauntlets": {
+                    "name": "Courtly Lover's Gauntlets of Maiming",
+                    "mats": {
+                        "Double Duracoat": 4,
+                        "Mastodon Pelt": 2
+                    }
+                },
+                "Breeches": {
+                    "name": "Courtly Lover's Breeches of Maiming",
+                    "mats": {
+                        "Mastodon Pelt": 10,
+                        "Turali Pigment": 2
+                    }
+                },
+                "Boots": {
+                    "name": "Courtly Lover's Boots of Maiming",
+                    "mats": {
+                        "Mastodon Pelt": 4,
+                        "Turali Pigment": 2
+                    }
+                },
+                "Earrings": {
+                    "name": "Courtly Lover's Earrings of Slaying",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Choker": {
+                    "name": "Courtly Lover's Choker of Slaying",
+                    "mats": {
+                        "Turali Pigment": 2,
+                        "Mastodon Pelt": 2
+                    }
+                },
+                "Wristlet": {
+                    "name": "Courtly Lover's Wristlet of Slaying",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Ring": {
+                    "name": "Courtly Lover's Ring of Slaying",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                }
+            }
+        },
+        "Courtly Lover's Striking": {
+            "currency": "Aesthetics",
+            "materials_per_piece": {
+                "Temple Chain": {
+                    "name": "Courtly Lover's Temple Chain of Striking",
+                    "mats": {
+                        "Everkeep Resin": 4,
+                        "Turali Pigment": 2
+                    }
+                },
+                "Cloak": {
+                    "name": "Courtly Lover's Cloak of Striking",
+                    "mats": {
+                        "Turali Pigment": 8,
+                        "Mastodon Pelt": 2
+                    }
+                },
+                "Armguards": {
+                    "name": "Courtly Lover's Armguards of Striking",
+                    "mats": {
+                        "Mastodon Pelt": 6,
+                        "Turali Pigment": 2
+                    }
+                },
+                "Brais": {
+                    "name": "Courtly Lover's Brais of Striking",
+                    "mats": {
+                        "Turali Pigment": 6,
+                        "Mastodon Pelt": 6
+                    }
+                },
+                "Boots": {
+                    "name": "Courtly Lover's Boots of Striking",
+                    "mats": {
+                        "Mastodon Pelt": 4,
+                        "Insulating Varnish": 2
+                    }
+                },
+                "Earrings": {
+                    "name": "Courtly Lover's Earrings of Slaying",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Choker": {
+                    "name": "Courtly Lover's Choker of Slaying",
+                    "mats": {
+                        "Turali Pigment": 2,
+                        "Mastodon Pelt": 2
+                    }
+                },
+                "Wristlet": {
+                    "name": "Courtly Lover's Wristlet of Slaying",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Ring": {
+                    "name": "Courtly Lover's Ring of Slaying",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                }
+            }
+        },
+        "Courtly Lover's Scouting": {
+            "currency": "Aesthetics",
+            "materials_per_piece": {
+                "Hairpin": {
+                    "name": "Courtly Lover's Hairpin of Scouting",
+                    "mats": {
+                        "Everkeep Resin": 4,
+                        "Turali Pigment": 2
+                    }
+                },
+                "Shirt": {
+                    "name": "Courtly Lover's Shirt of Scouting",
+                    "mats": {
+                        "Turali Pigment": 8,
+                        "Everkeep Resin": 2
+                    }
+                },
+                "Halfgloves": {
+                    "name": "Courtly Lover's Halfgloves of Scouting",
+                    "mats": {
+                        "Turali Pigment": 4,
+                        "Everkeep Resin": 2
+                    }
+                },
+                "Trousers": {
+                    "name": "Courtly Lover's Trousers of Scouting",
+                    "mats": {
+                        "Mastodon Pelt": 10,
+                        "Turali Pigment": 2
+                    }
+                },
+                "Shoes": {
+                    "name": "Courtly Lover's Shoes of Scouting",
+                    "mats": {
+                        "Mastodon Pelt": 4,
+                        "Insulating Varnish": 2
+                    }
+                },
+                "Earrings": {
+                    "name": "Courtly Lover's Earrings of Aiming",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Choker": {
+                    "name": "Courtly Lover's Choker of Aiming",
+                    "mats": {
+                        "Turali Pigment": 2,
+                        "Mastodon Pelt": 2
+                    }
+                },
+                "Wristlet": {
+                    "name": "Courtly Lover's Wristlet of Aiming",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Ring": {
+                    "name": "Courtly Lover's Ring of Aiming",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                }
+            }
+        },
+        "Courtly Lover's Aiming": {
+            "currency": "Aesthetics",
+            "materials_per_piece": {
+                "Hairpin": {
+                    "name": "Courtly Lover's Hairpin of Aiming",
+                    "mats": {
+                        "Everkeep Resin": 4,
+                        "Turali Pigment": 2
+                    }
+                },
+                "Shirt": {
+                    "name": "Courtly Lover's Shirt of Aiming",
+                    "mats": {
+                        "Turali Pigment": 8,
+                        "Everkeep Resin": 2
+                    }
+                },
+                "Halfgloves": {
+                    "name": "Courtly Lover's Halfgloves of Aiming",
+                    "mats": {
+                        "Turali Pigment": 4,
+                        "Everkeep Resin": 2
+                    }
+                },
+                "Trousers": {
+                    "name": "Courtly Lover's Trousers of Aiming",
+                    "mats": {
+                        "Mastodon Pelt": 10,
+                        "Turali Pigment": 2
+                    }
+                },
+                "Shoes": {
+                    "name": "Courtly Lover's Shoes of Aiming",
+                    "mats": {
+                        "Mastodon Pelt": 4,
+                        "Insulating Varnish": 2
+                    }
+                },
+                "Earrings": {
+                    "name": "Courtly Lover's Earrings of Aiming",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Choker": {
+                    "name": "Courtly Lover's Choker of Aiming",
+                    "mats": {
+                        "Turali Pigment": 2,
+                        "Mastodon Pelt": 2
+                    }
+                },
+                "Wristlet": {
+                    "name": "Courtly Lover's Wristlet of Aiming",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Ring": {
+                    "name": "Courtly Lover's Ring of Aiming",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                }
+            }
+        },
+        "Courtly Lover's Casting": {
+            "currency": "Aesthetics",
+            "materials_per_piece": {
+                "Hood": {
+                    "name": "Courtly Lover's Hood of Casting",
+                    "mats": {
+                        "Turali Pigment": 4,
+                        "Mastodon Pelt": 2
+                    }
+                },
+                "Longcoat": {
+                    "name": "Courtly Lover's Longcoat of Casting",
+                    "mats": {
+                        "Turali Pigment": 8,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Gloves": {
+                    "name": "Courtly Lover's Gloves of Casting",
+                    "mats": {
+                        "Mastodon Pelt": 4,
+                        "Everkeep Resin": 2
+                    }
+                },
+                "Pantaloons": {
+                    "name": "Courtly Lover's Pantaloons of Casting",
+                    "mats": {
+                        "Turali Pigment": 6,
+                        "Mastodon Pelt": 4
+                    }
+                },
+                "Shoes": {
+                    "name": "Courtly Lover's Shoes of Casting",
+                    "mats": {
+                        "Mastodon Pelt": 4,
+                        "Insulating Varnish": 2
+                    }
+                },
+                "Earrings": {
+                    "name": "Courtly Lover's Earrings of Casting",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Choker": {
+                    "name": "Courtly Lover's Choker of Casting",
+                    "mats": {
+                        "Turali Pigment": 2,
+                        "Mastodon Pelt": 2
+                    }
+                },
+                "Wristlet": {
+                    "name": "Courtly Lover's Wristlet of Casting",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Ring": {
+                    "name": "Courtly Lover's Ring of Casting",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                }
+            }
+        },
+        "Courtly Lover's Healing": {
+            "currency": "Aesthetics",
+            "materials_per_piece": {
+                "Hood": {
+                    "name": "Courtly Lover's Hood of Healing",
+                    "mats": {
+                        "Turali Pigment": 4,
+                        "Mastodon Pelt": 2
+                    }
+                },
+                "Longcoat": {
+                    "name": "Courtly Lover's Longcoat of Healing",
+                    "mats": {
+                        "Turali Pigment": 8,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Gloves": {
+                    "name": "Courtly Lover's Gloves of Healing",
+                    "mats": {
+                        "Mastodon Pelt": 4,
+                        "Everkeep Resin": 2
+                    }
+                },
+                "Pantaloons": {
+                    "name": "Courtly Lover's Pantaloons of Healing",
+                    "mats": {
+                        "Turali Pigment": 6,
+                        "Mastodon Pelt": 4
+                    }
+                },
+                "Shoes": {
+                    "name": "Courtly Lover's Shoes of Healing",
+                    "mats": {
+                        "Mastodon Pelt": 4,
+                        "Insulating Varnish": 2
+                    }
+                },
+                "Earrings": {
+                    "name": "Courtly Lover's Earrings of Healing",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Choker": {
+                    "name": "Courtly Lover's Choker of Healing",
+                    "mats": {
+                        "Turali Pigment": 2,
+                        "Mastodon Pelt": 2
+                    }
+                },
+                "Wristlet": {
+                    "name": "Courtly Lover's Wristlet of Healing",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                },
+                "Ring": {
+                    "name": "Courtly Lover's Ring of Healing",
+                    "mats": {
+                        "Everkeep Resin": 2,
+                        "Double Duracoat": 2
+                    }
+                }
+            }
+        },
+        "Crested Crafting": {
+            "currency": "Purple Scrips",
+            "materials_per_piece": {
+                "Head": {
+                    "name": "Crested Headband of Crafting",
+                    "mats": {
+                        "Condensed Solution": 3,
+                        "Diatryma Pelt": 4,
+                        "Neo Abrasive": 6,
+                        "Mason's Abrasive": 3
+                    }
+                },
+                "Body": {
+                    "name": "Crested Shirt of Crafting",
+                    "mats": {
+                        "Condensed Solution": 4,
+                        "Diatryma Pelt": 10,
+                        "Neo Abrasive": 4,
+                        "Mason's Abrasive": 4
+                    }
+                },
+                "Hands": {
+                    "name": "Crested Gloves of Crafting",
+                    "mats": {
+                        "Condensed Solution": 3,
+                        "Diatryma Pelt": 6,
+                        "Cronopio Skin": 4,
+                        "Mason's Abrasive": 3
+                    }
+                },
+                "Legs": {
+                    "name": "Crested Culottes of Crafting",
+                    "mats": {
+                        "Condensed Solution": 4,
+                        "Diatryma Pelt": 8,
+                        "Cronopio Skin": 6,
+                        "Mason's Abrasive": 4
+                    }
+                },
+                "Feet": {
+                    "name": "Crested Boots of Crafting",
+                    "mats": {
+                        "Condensed Solution": 3,
+                        "Cronopio Skin": 6,
+                        "Diatryma Pelt": 4,
+                        "Mason's Abrasive": 3
+                    }
+                },
+                "Earrings": {
+                    "name": "Crested Earrings of Crafting",
+                    "mats": {
+                        "Condensed Solution": 2,
+                        "Hydrophobic Preservative": 4,
+                        "Shaaloani Coke": 4,
+                        "Mason's Abrasive": 2
+                    }
+                },
+                "Choker": {
+                    "name": "Crested Necklace of Crafting",
+                    "mats": {
+                        "Condensed Solution": 2,
+                        "Shaaloani Coke": 4,
+                        "Hydrophobic Preservative": 4,
+                        "Mason's Abrasive": 2
+                    }
+                },
+                "Wristlet": {
+                    "name": "Crested Bracelet of Crafting",
+                    "mats": {
+                        "Condensed Solution": 2,
+                        "Hydrophobic Preservative": 4,
+                        "Shaaloani Coke": 4,
+                        "Mason's Abrasive": 2
+                    }
+                },
+                "Ring": {
+                    "name": "Crested Ring of Crafting",
+                    "mats": {
+                        "Condensed Solution": 2,
+                        "Hydrophobic Preservative": 4,
+                        "Neo Abrasive": 2,
+                        "Mason's Abrasive": 2
+                    }
+                }
+            }
+        },
+        "Crested Gathering": {
+            "currency": "Purple Scrips",
+            "materials_per_piece": {
+                "Head": {
+                    "name": "Crested Hood of Gathering",
+                    "mats": {
+                        "Condensed Solution": 3,
+                        "Diatryma Pelt": 8,
+                        "Cronopio Skin": 2,
+                        "Mason's Abrasive": 3
+                    }
+                },
+                "Body": {
+                    "name": "Crested Coat of Gathering",
+                    "mats": {
+                        "Condensed Solution": 4,
+                        "Diatryma Pelt": 8,
+                        "Neo Abrasive": 6,
+                        "Mason's Abrasive": 4
+                    }
+                },
+                "Hands": {
+                    "name": "Crested Gloves of Gathering",
+                    "mats": {
+                        "Condensed Solution": 3,
+                        "Cronopio Skin": 6,
+                        "Diatryma Pelt": 4,
+                        "Mason's Abrasive": 3
+                    }
+                },
+                "Legs": {
+                    "name": "Crested Slops of Gathering",
+                    "mats": {
+                        "Condensed Solution": 4,
+                        "Diatryma Pelt": 8,
+                        "Cronopio Skin": 6,
+                        "Mason's Abrasive": 4
+                    }
+                },
+                "Feet": {
+                    "name": "Crested Boots of Gathering",
+                    "mats": {
+                        "Condensed Solution": 3,
+                        "Cronopio Skin": 8,
+                        "Diatryma Pelt": 2,
+                        "Mason's Abrasive": 3
+                    }
+                },
+                "Earrings": {
+                    "name": "Crested Earrings of Gathering",
+                    "mats": {
+                        "Condensed Solution": 2,
+                        "Hydrophobic Preservative": 4,
+                        "Shaaloani Coke": 4,
+                        "Mason's Abrasive": 2
+                    }
+                },
+                "Choker": {
+                    "name": "Crested Necklace of Gathering",
+                    "mats": {
+                        "Condensed Solution": 2,
+                        "Shaaloani Coke": 4,
+                        "Hydrophobic Preservative": 4,
+                        "Mason's Abrasive": 2
+                    }
+                },
+                "Wristlet": {
+                    "name": "Crested Bracelet of Gathering",
+                    "mats": {
+                        "Condensed Solution": 2,
+                        "Hydrophobic Preservative": 4,
+                        "Shaaloani Coke": 4,
+                        "Mason's Abrasive": 2
+                    }
+                },
+                "Ring": {
+                    "name": "Crested Ring of Gathering",
+                    "mats": {
+                        "Condensed Solution": 2,
+                        "Hydrophobic Preservative": 4,
+                        "Neo Abrasive": 2,
+                        "Mason's Abrasive": 2
+                    }
+                }
+            }
+        }
+    },
     "weapons": {
         "PLD": {
-            "name": "Paladin",
-            "has_offhand": true,
+            "name_mh": "Courtly Lover's Sword",
             "mats_mh": {
-                "Turali Pigment": 3,
+                "Double Duracoat": 4,
                 "Everkeep Resin": 2
             },
+            "has_offhand": true,
+            "name_oh": "Courtly Lover's Shield",
             "mats_oh": {
-                "Turali Pigment": 1,
-                "Everkeep Resin": 1
+                "Double Duracoat": 2,
+                "Everkeep Resin": 2
             }
         },
         "WAR": {
-            "name": "Warrior",
-            "has_offhand": false,
+            "name_mh": "Courtly Lover's Labrys",
             "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
+                "Double Duracoat": 6,
+                "Everkeep Resin": 4
             },
-            "mats_oh": {}
+            "has_offhand": false
         },
         "DRK": {
-            "name": "Dark Knight",
-            "has_offhand": false,
+            "name_mh": "Courtly Lover's Greatsword",
             "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
+                "Double Duracoat": 6,
+                "Everkeep Resin": 4
             },
-            "mats_oh": {}
+            "has_offhand": false
         },
         "GNB": {
-            "name": "Gunbreaker",
-            "has_offhand": false,
+            "name_mh": "Courtly Lover's Gunblade",
             "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
+                "Double Duracoat": 8,
+                "Everkeep Resin": 2
             },
-            "mats_oh": {}
-        },
-        "DRG": {
-            "name": "Dragoon",
-            "has_offhand": false,
-            "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
-            },
-            "mats_oh": {}
-        },
-        "RPR": {
-            "name": "Reaper",
-            "has_offhand": false,
-            "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
-            },
-            "mats_oh": {}
-        },
-        "MNK": {
-            "name": "Monk",
-            "has_offhand": false,
-            "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
-            },
-            "mats_oh": {}
-        },
-        "SAM": {
-            "name": "Samurai",
-            "has_offhand": false,
-            "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
-            },
-            "mats_oh": {}
-        },
-        "BRD": {
-            "name": "Bard",
-            "has_offhand": false,
-            "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
-            },
-            "mats_oh": {}
-        },
-        "MCH": {
-            "name": "Machinist",
-            "has_offhand": false,
-            "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
-            },
-            "mats_oh": {}
-        },
-        "DNC": {
-            "name": "Dancer",
-            "has_offhand": false,
-            "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
-            },
-            "mats_oh": {}
-        },
-        "NIN": {
-            "name": "Ninja",
-            "has_offhand": false,
-            "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
-            },
-            "mats_oh": {}
-        },
-        "VPR": {
-            "name": "Viper",
-            "has_offhand": false,
-            "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
-            },
-            "mats_oh": {}
+            "has_offhand": false
         },
         "WHM": {
-            "name": "White Mage",
-            "has_offhand": false,
+            "name_mh": "Courtly Lover's Cane",
             "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
+                "Insulating Varnish": 6,
+                "Everkeep Resin": 4
             },
-            "mats_oh": {}
+            "has_offhand": false
         },
         "SCH": {
-            "name": "Scholar",
-            "has_offhand": false,
+            "name_mh": "Courtly Lover's Codex",
             "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
+                "Everkeep Resin": 4,
+                "Insulating Varnish": 6
             },
-            "mats_oh": {}
+            "has_offhand": false
         },
         "AST": {
-            "name": "Astrologian",
-            "has_offhand": false,
+            "name_mh": "Courtly Lover's Astrometer",
             "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
+                "Everkeep Resin": 8,
+                "Turali Pigment": 2
             },
-            "mats_oh": {}
+            "has_offhand": false
         },
         "SGE": {
-            "name": "Sage",
-            "has_offhand": false,
+            "name_mh": "Courtly Lover's Pendulums",
             "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
+                "Everkeep Resin": 8,
+                "Double Duracoat": 2
             },
-            "mats_oh": {}
+            "has_offhand": false
+        },
+        "MNK": {
+            "name_mh": "Courtly Lover's Baghnakhs",
+            "mats_mh": {
+                "Double Duracoat": 8,
+                "Everkeep Resin": 2,
+                "Mastodon Pelt": 2
+            },
+            "has_offhand": false
+        },
+        "DRG": {
+            "name_mh": "Courtly Lover's Partisan",
+            "mats_mh": {
+                "Insulating Varnish": 8,
+                "Everkeep Resin": 2
+            },
+            "has_offhand": false
+        },
+        "NIN": {
+            "name_mh": "Courtly Lover's Daggers",
+            "mats_mh": {
+                "Double Duracoat": 8,
+                "Everkeep Resin": 2
+            },
+            "has_offhand": false
+        },
+        "SAM": {
+            "name_mh": "Courtly Lover's Blade",
+            "mats_mh": {
+                "Double Duracoat": 8,
+                "Insulating Varnish": 2
+            },
+            "has_offhand": false
+        },
+        "RPR": {
+            "name_mh": "Courtly Lover's War Scythe",
+            "mats_mh": {
+                "Double Duracoat": 8,
+                "Insulating Varnish": 2
+            },
+            "has_offhand": false
+        },
+        "VPR": {
+            "name_mh": "Courtly Lover's Twinfangs",
+            "mats_mh": {
+                "Double Duracoat": 6,
+                "Everkeep Resin": 4
+            },
+            "has_offhand": false
+        },
+        "BRD": {
+            "name_mh": "Courtly Lover's Longbow",
+            "mats_mh": {
+                "Everkeep Resin": 4,
+                "Double Duracoat": 6
+            },
+            "has_offhand": false
+        },
+        "MCH": {
+            "name_mh": "Courtly Lover's Pistol",
+            "mats_mh": {
+                "Double Duracoat": 6,
+                "Everkeep Resin": 4
+            },
+            "has_offhand": false
+        },
+        "DNC": {
+            "name_mh": "Courtly Lover's War Quoits",
+            "mats_mh": {
+                "Everkeep Resin": 6,
+                "Double Duracoat": 4
+            },
+            "has_offhand": false
         },
         "BLM": {
-            "name": "Black Mage",
-            "has_offhand": false,
+            "name_mh": "Courtly Lover's Scepter",
             "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
+                "Insulating Varnish": 4,
+                "Everkeep Resin": 6
             },
-            "mats_oh": {}
+            "has_offhand": false
         },
         "SMN": {
-            "name": "Summoner",
-            "has_offhand": false,
+            "name_mh": "Courtly Lover's Index",
             "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
+                "Double Duracoat": 4,
+                "Insulating Varnish": 6
             },
-            "mats_oh": {}
+            "has_offhand": false
         },
         "RDM": {
-            "name": "Red Mage",
-            "has_offhand": false,
+            "name_mh": "Courtly Lover's Rapier",
             "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
+                "Everkeep Resin": 6,
+                "Double Duracoat": 4
             },
-            "mats_oh": {}
+            "has_offhand": false
         },
         "PCT": {
-            "name": "Pictomancer",
-            "has_offhand": false,
+            "name_mh": "Courtly Lover's Filbert Brush",
             "mats_mh": {
-                "Turali Pigment": 4,
-                "Everkeep Resin": 3
+                "Double Duracoat": 6,
+                "Turali Pigment": 4
             },
-            "mats_oh": {}
+            "has_offhand": false
         },
         "CRP": {
-            "name": "Carpenter",
-            "has_offhand": true,
+            "name_mh": "Gold Thumb's Saw",
             "mats_mh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Hydrophobic Preservative": 4,
+                "Mason's Abrasive": 3
             },
+            "has_offhand": true,
+            "name_oh": "Gold Thumb's Claw Hammer",
             "mats_oh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Hydrophobic Preservative": 4,
+                "Mason's Abrasive": 3
             }
         },
         "BSM": {
-            "name": "Blacksmith",
-            "has_offhand": true,
+            "name_mh": "Gold Thumb's Cross-pein Hammer",
             "mats_mh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Hydrophobic Preservative": 4,
+                "Mason's Abrasive": 3
             },
+            "has_offhand": true,
+            "name_oh": "Gold Thumb's File",
             "mats_oh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Cronopio Skin": 4,
+                "Mason's Abrasive": 3
             }
         },
         "ARM": {
-            "name": "Armorer",
-            "has_offhand": true,
+            "name_mh": "Gold Thumb's Raising Hammer",
             "mats_mh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Cronopio Skin": 4,
+                "Mason's Abrasive": 3
             },
+            "has_offhand": true,
+            "name_oh": "Gold Thumb's Pliers",
             "mats_oh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 8,
+                "Neo Abrasive": 2,
+                "Mason's Abrasive": 3
             }
         },
         "GSM": {
-            "name": "Goldsmith",
-            "has_offhand": true,
+            "name_mh": "Gold Thumb's Mallet",
             "mats_mh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Neo Abrasive": 4,
+                "Mason's Abrasive": 3
             },
+            "has_offhand": true,
+            "name_oh": "Gold Thumb's Grinding Wheel",
             "mats_oh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Hydrophobic Preservative": 6,
+                "Neo Abrasive": 4,
+                "Mason's Abrasive": 3
             }
         },
         "LTW": {
-            "name": "Leatherworker",
-            "has_offhand": true,
+            "name_mh": "Gold Thumb's Round Knife",
             "mats_mh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 8,
+                "Hydrophobic Preservative": 2,
+                "Mason's Abrasive": 3
             },
+            "has_offhand": true,
+            "name_oh": "Gold Thumb's Awl",
             "mats_oh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Cronopio Skin": 4,
+                "Mason's Abrasive": 3
             }
         },
         "WVR": {
-            "name": "Weaver",
-            "has_offhand": true,
+            "name_mh": "Gold Thumb's Needle",
             "mats_mh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Neo Abrasive": 6,
+                "Shaaloani Coke": 4,
+                "Mason's Abrasive": 3
             },
+            "has_offhand": true,
+            "name_oh": "Gold Thumb's Spinning Wheel",
             "mats_oh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Hydrophobic Preservative": 6,
+                "Shaaloani Coke": 4,
+                "Mason's Abrasive": 3
             }
         },
         "ALC": {
-            "name": "Alchemist",
-            "has_offhand": true,
+            "name_mh": "Gold Thumb's Alembic",
             "mats_mh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Neo Abrasive": 4,
+                "Mason's Abrasive": 3
             },
+            "has_offhand": true,
+            "name_oh": "Gold Thumb's Mortar",
             "mats_oh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Hydrophobic Preservative": 4,
+                "Mason's Abrasive": 3
             }
         },
         "CUL": {
-            "name": "Culinarian",
-            "has_offhand": true,
+            "name_mh": "Gold Thumb's Frypan",
             "mats_mh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Neo Abrasive": 4,
+                "Mason's Abrasive": 3
             },
+            "has_offhand": true,
+            "name_oh": "Gold Thumb's Culinary Knife",
             "mats_oh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Hydrophobic Preservative": 4,
+                "Mason's Abrasive": 3
             }
         },
         "MIN": {
-            "name": "Miner",
-            "has_offhand": true,
+            "name_mh": "Gold Thumb's Pickaxe",
             "mats_mh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 8,
+                "Cronopio Skin": 2,
+                "Mason's Abrasive": 3
             },
+            "has_offhand": true,
+            "name_oh": "Gold Thumb's Sledgehammer",
             "mats_oh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Hydrophobic Preservative": 4,
+                "Mason's Abrasive": 3
             }
         },
         "BTN": {
-            "name": "Botanist",
-            "has_offhand": true,
+            "name_mh": "Gold Thumb's Hatchet",
             "mats_mh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Hydrophobic Preservative": 4,
+                "Mason's Abrasive": 3
             },
+            "has_offhand": true,
+            "name_oh": "Gold Thumb's Scythe",
             "mats_oh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Shaaloani Coke": 6,
+                "Cronopio Skin": 4,
+                "Mason's Abrasive": 3
             }
         },
         "FSH": {
-            "name": "Fisher",
-            "has_offhand": true,
+            "name_mh": "Gold Thumb's Fishing Rod",
             "mats_mh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
+                "Condensed Solution": 3,
+                "Hydrophobic Preservative": 6,
+                "Shaaloani Coke": 4,
+                "Mason's Abrasive": 3
             },
-            "mats_oh": {
-                "Shaaloani Coke": 3,
-                "Neo Abrasive": 2
-            }
+            "has_offhand": false
         }
     }
 }
