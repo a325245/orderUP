@@ -549,15 +549,37 @@ class FinalizeOrderModal(discord.ui.Modal):
         if not mats_display:
             mats_display = "*No base materials required.*"
             
-        return mats_display, cost_type
+        # We now return the raw dictionary (total_mats) so we can look up the IDs!
+        return mats_display, cost_type, total_mats
 
     async def on_submit(self, interaction: discord.Interaction):
         # 1. INSTANT ACKNOWLEDGMENT: This beats the 3-second clock!
         await interaction.response.edit_message(content="⏳ Calculating materials and assembling your order...", embed=None, view=None)
 
         guild = interaction.guild
-        mats_list, currency = await self.os_calculation_engine()
+        mats_list, currency, raw_mats = await self.os_calculation_engine()
         
+        # --- TEAMCRAFT LINK GENERATOR FOR GEARSETS ---
+        tc_payload = []
+        if raw_mats:
+            async with aiohttp.ClientSession(headers=HEADERS) as session:
+                for mat_name, qty in raw_mats.items():
+                    try:
+                        safe_name = mat_name.replace('"', '')
+                        params = {"sheets": "Item", "query": f'Name~"{safe_name}"', "limit": "1"}
+                        async with session.get(f"{XIVAPI_BASE}/search", params=params, timeout=2) as resp:
+                            if resp.status == 200:
+                                data = await resp.json()
+                                results = data.get('results', [])
+                                if results:
+                                    item_id = results[0].get('row_id')
+                                    tc_payload.append((item_id, qty))
+                    except Exception:
+                        pass
+        
+        tc_url = generate_teamcraft_url(tc_payload) if tc_payload else None
+        # ---------------------------------------------
+
         receipt_embed = discord.Embed(title=f"🆕 New Order: {self.gearset}", color=discord.Color.green())
         receipt_embed.add_field(name="Recipient Target", value=self.recipient.value, inline=False)
         receipt_embed.add_field(name="Armor Targets", value=", ".join(self.pieces), inline=True)
@@ -574,6 +596,11 @@ class FinalizeOrderModal(discord.ui.Modal):
             receipt_embed.add_field(name="Job Profiles Included", value=", ".join(job_displays), inline=True)
             
         receipt_embed.add_field(name=f"📦 Required Materials ({currency})", value=mats_list, inline=False)
+        
+        # Add the dynamically generated Teamcraft Link to the embed!
+        if tc_url:
+            receipt_embed.add_field(name="Teamcraft Link", value=f"[🛠️ Open Recipe List]({tc_url})", inline=False)
+            
         if self.notes.value:
             receipt_embed.add_field(name="📝 Special Notes", value=self.notes.value, inline=False)
 
@@ -593,8 +620,9 @@ class FinalizeOrderModal(discord.ui.Modal):
         
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
+        # Save the TC URL to the database for this gearset order
         cursor.execute("INSERT INTO orders (control_message_id, root_message_id, requester_id, items_summary, recipient, tc_url) VALUES (?, ?, ?, ?, ?, ?)",
-                       (control_msg.id, base_message.id, interaction.user.id, mats_list, self.recipient.value, None))
+                       (control_msg.id, base_message.id, interaction.user.id, mats_list, self.recipient.value, tc_url))
         conn.commit()
         conn.close()
 
