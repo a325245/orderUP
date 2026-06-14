@@ -8,6 +8,7 @@ from aiohttp import web
 import base64
 import re
 import sqlite3
+import traceback
 from datetime import timedelta
 from dotenv import load_dotenv
 
@@ -164,44 +165,30 @@ def generate_teamcraft_url(teamcraft_payload):
     return f"https://ffxivteamcraft.com/import/{encoded}"
 
 def validate_database_schema(data):
-    """Acts as the bouncer to ensure uploaded JSON won't crash the calculation engine."""
-    if not isinstance(data, dict): 
-        return "The root of the file must be a JSON object {}."
-        
+    if not isinstance(data, dict): return "The root of the file must be a JSON object {}."
     required_keys = ["gearsets", "job_mappings", "weapons"]
     missing = [k for k in required_keys if k not in data]
-    if missing:
-        return f"Missing primary categories: {', '.join(missing)}"
-        
-    if not isinstance(data["gearsets"], dict): 
-        return "'gearsets' must be an object {} containing your tier lists."
+    if missing: return f"Missing primary categories: {', '.join(missing)}"
+    if not isinstance(data["gearsets"], dict): return "'gearsets' must be an object {} containing your tier lists."
         
     for gs_name, gs_data in data["gearsets"].items():
-        if "currency" not in gs_data: 
-            return f"Gearset '{gs_name}' is missing the 'currency' label."
-        if "materials_per_piece" not in gs_data: 
-            return f"Gearset '{gs_name}' is missing 'materials_per_piece'."
-        if not isinstance(gs_data["materials_per_piece"], dict): 
-            return f"'{gs_name}' -> 'materials_per_piece' must be an object {{}}."
-            
-        # Future-proof check: ensuring explicit names exist
+        if "currency" not in gs_data: return f"Gearset '{gs_name}' is missing the 'currency' label."
+        if "materials_per_piece" not in gs_data: return f"Gearset '{gs_name}' is missing 'materials_per_piece'."
+        if not isinstance(gs_data["materials_per_piece"], dict): return f"'{gs_name}' -> 'materials_per_piece' must be an object {{}}."
         for piece, p_data in gs_data["materials_per_piece"].items():
             if not isinstance(p_data, dict) or "mats" not in p_data or "name" not in p_data:
                 return f"Piece '{piece}' in '{gs_name}' must contain explicit 'name' and 'mats'."
             
-    if not isinstance(data["weapons"], dict): 
-        return "'weapons' must be an object {} mapping jobs to weapon data."
-        
+    if not isinstance(data["weapons"], dict): return "'weapons' must be an object {} mapping jobs to weapon data."
     for job, w_data in data["weapons"].items():
         if "has_offhand" not in w_data or not isinstance(w_data["has_offhand"], bool):
             return f"Job '{job}' must have a true/false 'has_offhand' value."
         if "mats_mh" not in w_data or "name_mh" not in w_data: 
             return f"Job '{job}' is missing main hand data ('mats_mh' or 'name_mh')."
-            
     return None
 
 # ==========================================
-# BOT INITIALIZATION & BACKGROUND TASKS
+# BOT INITIALIZATION
 # ==========================================
 class CraftingBot(commands.Bot):
     def __init__(self):
@@ -212,12 +199,10 @@ class CraftingBot(commands.Bot):
         app.router.add_get('/', lambda request: web.Response(text="Bot is alive!"))
         runner = web.AppRunner(app)
         await runner.setup()
-        
         port = int(os.environ.get("PORT", 10000))
         site = web.TCPSite(runner, '0.0.0.0', port)
         await site.start()
         print(f"🌐 Web server listening on port {port}")
-        
         self.check_stale_orders.start()
 
     @tasks.loop(hours=12)
@@ -226,12 +211,10 @@ class CraftingBot(commands.Bot):
         cursor = conn.cursor()
         cursor.execute("SELECT control_message_id, root_message_id, recipient FROM orders WHERE status IN ('Pending', 'Claimed') AND reminded = 0")
         rows = cursor.fetchall()
-        
         now = discord.utils.utcnow()
         for row in rows:
             control_msg_id, root_msg_id, recipient = row
             created_at = discord.utils.snowflake_time(control_msg_id)
-            
             if now - created_at > timedelta(days=3):
                 for guild in self.guilds:
                     try:
@@ -239,9 +222,7 @@ class CraftingBot(commands.Bot):
                         if thread:
                             crafter_role = discord.utils.get(guild.roles, name=CRAFTER_ROLE_NAME)
                             role_ping = f"<@&{crafter_role.id}>" if crafter_role else "Crafters"
-                            
                             await thread.send(f"⚠️ **Timeout Reminder:** {role_ping}, this order for **{recipient}** has been open for over 3 days without being completed!")
-                            
                             cursor.execute("UPDATE orders SET reminded = 1 WHERE control_message_id = ?", (control_msg_id,))
                             conn.commit()
                             break 
@@ -282,100 +263,106 @@ class OrderModal(discord.ui.Modal, title="Bulk Crafting Request"):
     recipient = discord.ui.TextInput(label="Who is this for?", placeholder="Character Name", required=True)
 
     async def on_submit(self, interaction: discord.Interaction):
-        await interaction.response.edit_message(content="⏳ Calculating materials and assembling your order...", embed=None, view=None)
+        await interaction.response.send_message("⏳ **Calculating materials and assembling your order...** Please wait.", ephemeral=True)
 
-        lines = self.items_input.value.strip().split('\n')
-        final_items_list = []
-        teamcraft_payload = []
-        provided_tc_url = None
+        try:
+            lines = self.items_input.value.strip().split('\n')
+            final_items_list = []
+            teamcraft_payload = []
+            provided_tc_url = None
 
-        async with aiohttp.ClientSession(headers=HEADERS) as session:
-            for line in lines:
-                line = line.strip()
-                if not line: continue
-                
-                tc_match = re.search(r'(https?://[a-zA-Z0-9.\-]*ffxivteamcraft\.com\S*)', line, re.IGNORECASE)
-                if tc_match:
-                    provided_tc_url = tc_match.group(1)
-                    continue 
-
-                match = re.match(r'^(\d+)\s*[xX]?\s*(.*)$', line)
-                if match:
-                    qty, raw_item_name = int(match.group(1)), match.group(2).strip()
-                else:
-                    qty, raw_item_name = 1, line.strip()
-
-                try:
-                    search_url = f"{XIVAPI_BASE}/search"
-                    safe_raw = raw_item_name.replace('"', '')
+            async with aiohttp.ClientSession(headers=HEADERS) as session:
+                for line in lines:
+                    line = line.strip()
+                    if not line: continue
                     
-                    params_exact = {"sheets": "Item", "query": f'Name~"{safe_raw}"', "limit": "1"}
-                    clean_search = re.sub(r"[^\w\s]", "", safe_raw)
-                    params_fuzzy = {"sheets": "Item", "query": clean_search, "limit": "1"}
-                    wildcard_query = " ".join([f"*{word}*" for word in clean_search.split()])
-                    params_wildcard = {"sheets": "Item", "query": wildcard_query, "limit": "1"}
-                    
-                    async with session.get(search_url, params=params_exact, timeout=3) as resp:
-                        data = await resp.json() if resp.status == 200 else {}
-                        results = data.get('results', [])
+                    tc_match = re.search(r'(https?://[a-zA-Z0-9.\-]*ffxivteamcraft\.com\S*)', line, re.IGNORECASE)
+                    if tc_match:
+                        provided_tc_url = tc_match.group(1)
+                        continue 
+
+                    match = re.match(r'^(\d+)\s*[xX]?\s*(.*)$', line)
+                    if match:
+                        qty, raw_item_name = int(match.group(1)), match.group(2).strip()
+                    else:
+                        qty, raw_item_name = 1, line.strip()
+
+                    try:
+                        search_url = f"{XIVAPI_BASE}/search"
+                        safe_raw = raw_item_name.replace('"', '')
                         
-                    if not results and clean_search != safe_raw:
-                        async with session.get(search_url, params=params_fuzzy, timeout=3) as resp:
+                        params_exact = {"sheets": "Item", "query": f'Name~"{safe_raw}"', "limit": "1"}
+                        clean_search = re.sub(r"[^\w\s]", "", safe_raw)
+                        params_fuzzy = {"sheets": "Item", "query": clean_search, "limit": "1"}
+                        wildcard_query = " ".join([f"*{word}*" for word in clean_search.split()])
+                        params_wildcard = {"sheets": "Item", "query": wildcard_query, "limit": "1"}
+                        
+                        async with session.get(search_url, params=params_exact, timeout=3) as resp:
                             data = await resp.json() if resp.status == 200 else {}
                             results = data.get('results', [])
                             
-                    if not results:
-                        async with session.get(search_url, params=params_wildcard, timeout=3) as resp:
-                            data = await resp.json() if resp.status == 200 else {}
-                            results = data.get('results', [])
+                        if not results and clean_search != safe_raw:
+                            async with session.get(search_url, params=params_fuzzy, timeout=3) as resp:
+                                data = await resp.json() if resp.status == 200 else {}
+                                results = data.get('results', [])
+                                
+                        if not results:
+                            async with session.get(search_url, params=params_wildcard, timeout=3) as resp:
+                                data = await resp.json() if resp.status == 200 else {}
+                                results = data.get('results', [])
 
-                    if results:
-                        item_id = results[0].get('row_id')
-                        official_name = results[0].get('fields', {}).get('Name') or raw_item_name
-                        final_items_list.append(f"• **{qty}x** {official_name}")
-                        teamcraft_payload.append((item_id, qty))
-                    else:
-                        final_items_list.append(f"• **{qty}x** {raw_item_name} *(⚠️ Unverified)*")
-                except Exception:
-                    final_items_list.append(f"• **{qty}x** {raw_item_name} *(⚠️ Catalog Offline)*")
+                        if results:
+                            item_id = results[0].get('row_id')
+                            official_name = results[0].get('fields', {}).get('Name') or raw_item_name
+                            final_items_list.append(f"• **{qty}x** {official_name}")
+                            teamcraft_payload.append((item_id, qty))
+                        else:
+                            final_items_list.append(f"• **{qty}x** {raw_item_name} *(⚠️ Unverified)*")
+                    except Exception:
+                        final_items_list.append(f"• **{qty}x** {raw_item_name} *(⚠️ Catalog Offline)*")
 
-        if not final_items_list and not provided_tc_url:
-            await interaction.edit_original_response(content="❌ No valid text or URL found.")
-            return
+            if not final_items_list and not provided_tc_url:
+                await interaction.edit_original_response(content="❌ **Error:** No valid text or URL found in your submission.")
+                return
 
-        items_summary_str = "\n".join(final_items_list) if final_items_list else "*(Items contained within provided Teamcraft URL)*"
-        final_tc_url = provided_tc_url or (generate_teamcraft_url(teamcraft_payload) if teamcraft_payload else None)
-        
-        guild = interaction.guild
-        active_orders_channel = discord.utils.get(guild.text_channels, name="open-orders")
-        if not active_orders_channel:
-            active_orders_channel = await guild.create_text_channel("open-orders")
-        
-        embed = discord.Embed(title="🆕 Bulk Crafting Order", color=discord.Color.gold())
-        embed.add_field(name="Recipient Target", value=self.recipient.value, inline=False)
-        embed.add_field(name="Requested Items", value=items_summary_str, inline=False)
-        embed.add_field(name="Requested By", value=interaction.user.mention, inline=True)
-        if final_tc_url:
-            embed.add_field(name="Teamcraft Link", value=f"[🛠️ Open Recipe List]({final_tc_url})", inline=False)
+            items_summary_str = "\n".join(final_items_list) if final_items_list else "*(Items contained within provided Teamcraft URL)*"
+            final_tc_url = provided_tc_url or (generate_teamcraft_url(teamcraft_payload) if teamcraft_payload else None)
+            
+            guild = interaction.guild
+            active_orders_channel = discord.utils.get(guild.text_channels, name="open-orders")
+            if not active_orders_channel:
+                active_orders_channel = await guild.create_text_channel("open-orders")
+            
+            embed = discord.Embed(title="🆕 Bulk Crafting Order", color=discord.Color.gold())
+            embed.add_field(name="Recipient Target", value=self.recipient.value, inline=False)
+            embed.add_field(name="Requested Items", value=items_summary_str, inline=False)
+            embed.add_field(name="Requested By", value=interaction.user.mention, inline=True)
+            if final_tc_url:
+                embed.add_field(name="Teamcraft Link", value=f"[🛠️ Open Recipe List]({final_tc_url})", inline=False)
 
-        root_msg = await active_orders_channel.send(embed=embed)
-        thread = await root_msg.create_thread(name=f"Order - {self.recipient.value[:20]}")
-        
-        control_msg = await thread.send("Use the dashboard below to coordinate this craft.", view=OrderControlView())
+            root_msg = await active_orders_channel.send(embed=embed)
+            thread = await root_msg.create_thread(name=f"Order - {self.recipient.value[:20]}")
+            
+            control_msg = await thread.send("Use the dashboard below to coordinate this craft.", view=OrderControlView())
 
-        crafter_role = discord.utils.get(guild.roles, name=CRAFTER_ROLE_NAME)
-        role_ping = f"<@&{crafter_role.id}>" if crafter_role else ""
-        ping_msg = await thread.send(f"{interaction.user.mention} {role_ping}")
-        await ping_msg.delete()
-        
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO orders (control_message_id, root_message_id, requester_id, items_summary, recipient, tc_url) VALUES (?, ?, ?, ?, ?, ?)",
-                       (control_msg.id, root_msg.id, interaction.user.id, items_summary_str, self.recipient.value, final_tc_url))
-        conn.commit()
-        conn.close()
+            crafter_role = discord.utils.get(guild.roles, name=CRAFTER_ROLE_NAME)
+            role_ping = f"<@&{crafter_role.id}>" if crafter_role else ""
+            ping_msg = await thread.send(f"{interaction.user.mention} {role_ping}")
+            await ping_msg.delete()
+            
+            conn = sqlite3.connect(DB_PATH)
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO orders (control_message_id, root_message_id, requester_id, items_summary, recipient, tc_url) VALUES (?, ?, ?, ?, ?, ?)",
+                           (control_msg.id, root_msg.id, interaction.user.id, items_summary_str, self.recipient.value, final_tc_url))
+            conn.commit()
+            conn.close()
 
-        await interaction.edit_original_response(content=f"✅ Bulk order sent to <#{active_orders_channel.id}>! You can now dismiss this message.")
+            await interaction.edit_original_response(content=f"✅ **Bulk order successfully sent to** <#{active_orders_channel.id}>! You can now dismiss this message.")
+            
+        except Exception as e:
+            error_trace = traceback.format_exc()
+            print(error_trace)
+            await interaction.edit_original_response(content=f"❌ **CRITICAL ERROR in OrderModal:**\n```py\n{e}\n```\nTell the admin to check the logs!")
 
 # ==========================================
 # DYNAMIC MULTI-STEP WIZARD VIEWS
@@ -386,21 +373,17 @@ class OrderWizardView(discord.ui.View):
         options = []
         for name, data in GEAR_DB.get("gearsets", {}).items():
             options.append(discord.SelectOption(label=name, description=f"Uses {data.get('currency', 'Materials')}"))
-            
         if not options:
             options.append(discord.SelectOption(label="Error: No Data Loaded", value="error"))
-            
         self.add_item(GearsetDropdown(options))
 
 class GearsetDropdown(discord.ui.Select):
     def __init__(self, options):
         super().__init__(placeholder="Select the base gearset tier...", min_values=1, max_values=1, options=options)
-
     async def callback(self, interaction: discord.Interaction):
         if self.values[0] == "error":
             await interaction.response.edit_message(content="❌ Database failed to load.", view=None)
             return
-            
         selected_set = self.values[0]
         await interaction.response.edit_message(
             content=f"**Set Chosen:** {selected_set}\n\n**Step 2:** Select the specific armor pieces required (Defaults to all):",
@@ -412,7 +395,6 @@ class ArmorSelectionView(discord.ui.View):
         super().__init__(timeout=300)
         self.selected_set = selected_set
         set_pieces = list(GEAR_DB["gearsets"][selected_set]["materials_per_piece"].keys())
-        
         self.add_item(ArmorDropdown(set_pieces))
         self.add_item(ConfirmArmorButton(set_pieces))
 
@@ -420,7 +402,6 @@ class ArmorDropdown(discord.ui.Select):
     def __init__(self, pieces):
         options = [discord.SelectOption(label=piece, default=True) for piece in pieces]
         super().__init__(placeholder="Toggle required components...", min_values=1, max_values=len(pieces), options=options)
-
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.defer()
 
@@ -428,15 +409,12 @@ class ConfirmArmorButton(discord.ui.Button):
     def __init__(self, default_pieces):
         super().__init__(label="Confirm Armor ➡️", style=discord.ButtonStyle.primary)
         self.default_pieces = default_pieces
-
     async def callback(self, interaction: discord.Interaction):
         view: ArmorSelectionView = self.view
         chosen_pieces = self.default_pieces
-        
         for item in view.children:
             if isinstance(item, ArmorDropdown) and getattr(item, 'values', None):
                 chosen_pieces = item.values
-                
         await interaction.response.edit_message(
             content=f"**Set:** {view.selected_set}\n**Pieces:** {', '.join(chosen_pieces)}\n\n**Step 3:** Select the jobs that require weapons/tools (Optional):",
             view=JobSelectionView(view.selected_set, chosen_pieces)
@@ -447,21 +425,16 @@ class JobSelectionView(discord.ui.View):
         super().__init__(timeout=300)
         self.selected_set = selected_set
         self.chosen_pieces = chosen_pieces
-        
         category = ""
         for key in GEAR_DB["job_mappings"].keys():
             if key in selected_set:
                 category = key
                 break
-                
         valid_jobs = GEAR_DB["job_mappings"].get(category, [])
-        
         if valid_jobs:
             self.add_item(JobDropdown(valid_jobs))
-        
         if category in ["Crafting", "Gathering"] or "PLD" in valid_jobs:
             self.add_item(OffhandDropdown())
-            
         self.add_item(ContinueButton())
 
 class JobDropdown(discord.ui.Select):
@@ -469,12 +442,9 @@ class JobDropdown(discord.ui.Select):
         options = []
         for job in jobs:
             w_data = GEAR_DB["weapons"].get(job, {})
-            # Read the explicit full name from the new JSON format!
             job_name = w_data.get("name_mh", job) if w_data else job
             options.append(discord.SelectOption(label=job, description=job_name[:100]))
-            
         super().__init__(placeholder="Select associated weapons/tools...", min_values=0, max_values=len(options), options=options)
-
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.defer() 
 
@@ -486,25 +456,21 @@ class OffhandDropdown(discord.ui.Select):
             discord.SelectOption(label="Offhand Only", value="oh")
         ]
         super().__init__(placeholder="Configure Weapon/Tool Scope...", min_values=1, max_values=1, options=options)
-
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.defer()
 
 class ContinueButton(discord.ui.Button):
     def __init__(self):
         super().__init__(label="Continue to Finalize ➡️", style=discord.ButtonStyle.success)
-
     async def callback(self, interaction: discord.Interaction):
         view: JobSelectionView = self.view
         selected_jobs = []
         tool_scope = "both"
-        
         for item in view.children:
             if isinstance(item, JobDropdown) and item.values:
                 selected_jobs = item.values
             elif isinstance(item, OffhandDropdown) and item.values:
                 tool_scope = item.values[0]
-
         await interaction.response.send_modal(
             FinalizeOrderModal(view.selected_set, view.chosen_pieces, selected_jobs, tool_scope)
         )
@@ -522,7 +488,6 @@ class FinalizeOrderModal(discord.ui.Modal):
 
         self.recipient = discord.ui.TextInput(label="Recipient Character Name", placeholder="Who gets this gear?", required=True)
         self.notes = discord.ui.TextInput(label="Special Requests / Exceptions", style=discord.TextStyle.paragraph, required=False)
-        
         self.add_item(self.recipient)
         self.add_item(self.notes)
 
@@ -530,137 +495,114 @@ class FinalizeOrderModal(discord.ui.Modal):
         total_mats = {}
         set_data = GEAR_DB["gearsets"][self.gearset]
         cost_type = set_data["currency"]
-        
         def add_mats(mat_dict, multiplier=1):
             for mat_name, qty in mat_dict.items():
                 total_mats[mat_name] = total_mats.get(mat_name, 0) + (qty * multiplier)
 
         for piece in self.pieces:
             piece_data = set_data["materials_per_piece"].get(piece, {})
-            # Target the inner 'mats' dictionary mapping created by the future-proof scraper
             add_mats(piece_data.get("mats", {}), multiplier=max(1, len(self.jobs)))
             
         for job in self.jobs:
             w_data = GEAR_DB["weapons"].get(job, {})
             if not w_data: continue
-                
-            if self.tool_scope in ["both", "mh"]:
-                add_mats(w_data.get("mats_mh", {}))
-                
-            if self.tool_scope in ["both", "oh"] and w_data.get("has_offhand", False):
-                add_mats(w_data.get("mats_oh", {}))
+            if self.tool_scope in ["both", "mh"]: add_mats(w_data.get("mats_mh", {}))
+            if self.tool_scope in ["both", "oh"] and w_data.get("has_offhand", False): add_mats(w_data.get("mats_oh", {}))
                 
         mats_display = "\n".join([f"**{qty}x** {name}" for name, qty in total_mats.items()])
-        if not mats_display:
-            mats_display = "*No base materials required.*"
-            
+        if not mats_display: mats_display = "*No base materials required.*"
         return mats_display, cost_type
 
     async def on_submit(self, interaction: discord.Interaction):
-        await interaction.response.edit_message(content="⏳ Calculating materials and assembling your order...", embed=None, view=None)
-
-        guild = interaction.guild
-        mats_list, currency = await self.os_calculation_engine()
+        await interaction.response.send_message("⏳ **Crunching the numbers and submitting your order...**", ephemeral=True)
         
-        # --- NEW FUTURE-PROOF TEAMCRAFT LINK GENERATOR ---
-        tc_payload = []
-        items_to_find = []
-        set_data = GEAR_DB["gearsets"][self.gearset]
-        multiplier = max(1, len(self.jobs))
-        
-        # 1. Grab Explicit Armor Names
-        for piece in self.pieces:
-            piece_data = set_data["materials_per_piece"].get(piece, {})
-            if "name" in piece_data:
-                items_to_find.append((piece_data["name"], multiplier))
+        try:
+            guild = interaction.guild
+            mats_list, currency = await self.os_calculation_engine()
             
-        # 2. Grab Explicit Weapon Names
-        for job in self.jobs:
-            w_data = GEAR_DB["weapons"].get(job, {})
-            if not w_data: continue
+            tc_payload = []
+            items_to_find = []
+            set_data = GEAR_DB["gearsets"][self.gearset]
+            multiplier = max(1, len(self.jobs))
             
-            if self.tool_scope in ["both", "mh"] and "name_mh" in w_data:
-                items_to_find.append((w_data["name_mh"], 1))
+            for piece in self.pieces:
+                piece_data = set_data["materials_per_piece"].get(piece, {})
+                if "name" in piece_data: items_to_find.append((piece_data["name"], multiplier))
                 
-            if self.tool_scope in ["both", "oh"] and w_data.get("has_offhand", False) and "name_oh" in w_data:
-                items_to_find.append((w_data["name_oh"], 1))
-
-        # 3. Search XIVAPI using the explicit names
-        async with aiohttp.ClientSession(headers=HEADERS) as session:
-            for exact_name, qty in items_to_find:
-                try:
-                    safe_name = exact_name.replace('"', '')
-                    clean_search = re.sub(r"[^\w\s]", "", safe_name)
-                    
-                    params_exact = {"sheets": "Item", "query": f'Name~"{safe_name}"', "limit": "1"}
-                    params_fuzzy = {"sheets": "Item", "query": clean_search, "limit": "1"}
-                    
-                    item_id = None
-                    
-                    # Pass 1: Exact Match
-                    async with session.get(f"{XIVAPI_BASE}/search", params=params_exact, timeout=2) as resp:
-                        data = await resp.json() if resp.status == 200 else {}
-                        if data.get('results'): item_id = data['results'][0].get('row_id')
-                    
-                    # Pass 2: Fuzzy Match
-                    if not item_id and clean_search != safe_name:
-                        async with session.get(f"{XIVAPI_BASE}/search", params=params_fuzzy, timeout=2) as resp:
-                            data = await resp.json() if resp.status == 200 else {}
-                            if data.get('results'): item_id = data['results'][0].get('row_id')
-                            
-                    if item_id:
-                        tc_payload.append((item_id, qty))
-                except Exception:
-                    pass
-                    
-        tc_url = generate_teamcraft_url(tc_payload) if tc_payload else None
-        # -------------------------------------------------------
-
-        receipt_embed = discord.Embed(title=f"🆕 New Order: {self.gearset}", color=discord.Color.green())
-        receipt_embed.add_field(name="Recipient Target", value=self.recipient.value, inline=False)
-        receipt_embed.add_field(name="Armor Targets", value=", ".join(self.pieces), inline=True)
-        
-        if self.jobs:
-            job_displays = []
             for job in self.jobs:
                 w_data = GEAR_DB["weapons"].get(job, {})
-                if w_data.get("has_offhand", False):
-                    scope_text = "MH+OH" if self.tool_scope == "both" else "MH Only" if self.tool_scope == "mh" else "OH Only"
-                    job_displays.append(f"{job} ({scope_text})")
-                else:
-                    job_displays.append(job)
-            receipt_embed.add_field(name="Job Profiles Included", value=", ".join(job_displays), inline=True)
+                if not w_data: continue
+                if self.tool_scope in ["both", "mh"] and "name_mh" in w_data: items_to_find.append((w_data["name_mh"], 1))
+                if self.tool_scope in ["both", "oh"] and w_data.get("has_offhand", False) and "name_oh" in w_data: items_to_find.append((w_data["name_oh"], 1))
+
+            async with aiohttp.ClientSession(headers=HEADERS) as session:
+                for exact_name, qty in items_to_find:
+                    try:
+                        safe_name = exact_name.replace('"', '')
+                        clean_search = re.sub(r"[^\w\s]", "", safe_name)
+                        params_exact = {"sheets": "Item", "query": f'Name~"{safe_name}"', "limit": "1"}
+                        params_fuzzy = {"sheets": "Item", "query": clean_search, "limit": "1"}
+                        
+                        item_id = None
+                        async with session.get(f"{XIVAPI_BASE}/search", params=params_exact, timeout=2) as resp:
+                            data = await resp.json() if resp.status == 200 else {}
+                            if data.get('results'): item_id = data['results'][0].get('row_id')
+                        
+                        if not item_id and clean_search != safe_name:
+                            async with session.get(f"{XIVAPI_BASE}/search", params=params_fuzzy, timeout=2) as resp:
+                                data = await resp.json() if resp.status == 200 else {}
+                                if data.get('results'): item_id = data['results'][0].get('row_id')
+                                
+                        if item_id: tc_payload.append((item_id, qty))
+                    except Exception:
+                        pass
+                        
+            tc_url = generate_teamcraft_url(tc_payload) if tc_payload else None
+
+            receipt_embed = discord.Embed(title=f"🆕 New Order: {self.gearset}", color=discord.Color.green())
+            receipt_embed.add_field(name="Recipient Target", value=self.recipient.value, inline=False)
+            receipt_embed.add_field(name="Armor Targets", value=", ".join(self.pieces), inline=True)
             
-        receipt_embed.add_field(name=f"📦 Required Materials ({currency})", value=mats_list, inline=False)
-        
-        if tc_url:
-            receipt_embed.add_field(name="Teamcraft Link", value=f"[🛠️ Open Recipe List]({tc_url})", inline=False)
+            if self.jobs:
+                job_displays = []
+                for job in self.jobs:
+                    w_data = GEAR_DB["weapons"].get(job, {})
+                    if w_data.get("has_offhand", False):
+                        scope_text = "MH+OH" if self.tool_scope == "both" else "MH Only" if self.tool_scope == "mh" else "OH Only"
+                        job_displays.append(f"{job} ({scope_text})")
+                    else:
+                        job_displays.append(job)
+                receipt_embed.add_field(name="Job Profiles Included", value=", ".join(job_displays), inline=True)
+                
+            receipt_embed.add_field(name=f"📦 Required Materials ({currency})", value=mats_list, inline=False)
+            if tc_url: receipt_embed.add_field(name="Teamcraft Link", value=f"[🛠️ Open Recipe List]({tc_url})", inline=False)
+            if self.notes.value: receipt_embed.add_field(name="📝 Special Notes", value=self.notes.value, inline=False)
+
+            active_orders_channel = discord.utils.get(guild.text_channels, name="open-orders")
+            if not active_orders_channel: active_orders_channel = await guild.create_text_channel("open-orders")
+
+            base_message = await active_orders_channel.send(embed=receipt_embed)
+            thread = await base_message.create_thread(name=f"Order - {self.recipient.value[:20]}")
+            control_msg = await thread.send("Use the dashboard below to coordinate this craft.", view=OrderControlView())
+
+            crafter_role = discord.utils.get(guild.roles, name=CRAFTER_ROLE_NAME)
+            role_ping = f"<@&{crafter_role.id}>" if crafter_role else ""
+            ping_msg = await thread.send(f"{interaction.user.mention} {role_ping}")
+            await ping_msg.delete()
             
-        if self.notes.value:
-            receipt_embed.add_field(name="📝 Special Notes", value=self.notes.value, inline=False)
+            conn = sqlite3.connect(DB_PATH)
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO orders (control_message_id, root_message_id, requester_id, items_summary, recipient, tc_url) VALUES (?, ?, ?, ?, ?, ?)",
+                           (control_msg.id, base_message.id, interaction.user.id, mats_list, self.recipient.value, tc_url))
+            conn.commit()
+            conn.close()
 
-        active_orders_channel = discord.utils.get(guild.text_channels, name="open-orders")
-        if not active_orders_channel:
-            active_orders_channel = await guild.create_text_channel("open-orders")
-
-        base_message = await active_orders_channel.send(embed=receipt_embed)
-        thread = await base_message.create_thread(name=f"Order - {self.recipient.value[:20]}")
-        
-        control_msg = await thread.send("Use the dashboard below to coordinate this craft.", view=OrderControlView())
-
-        crafter_role = discord.utils.get(guild.roles, name=CRAFTER_ROLE_NAME)
-        role_ping = f"<@&{crafter_role.id}>" if crafter_role else ""
-        ping_msg = await thread.send(f"{interaction.user.mention} {role_ping}")
-        await ping_msg.delete()
-        
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO orders (control_message_id, root_message_id, requester_id, items_summary, recipient, tc_url) VALUES (?, ?, ?, ?, ?, ?)",
-                       (control_msg.id, base_message.id, interaction.user.id, mats_list, self.recipient.value, tc_url))
-        conn.commit()
-        conn.close()
-
-        await interaction.edit_original_response(content=f"✅ Order successfully logged to <#{active_orders_channel.id}>! You can now dismiss this message.")
+            await interaction.edit_original_response(content=f"✅ **Order successfully logged to** <#{active_orders_channel.id}>! You can now dismiss this message.")
+            
+        except Exception as e:
+            error_trace = traceback.format_exc()
+            print(error_trace)
+            await interaction.edit_original_response(content=f"❌ **CRITICAL ERROR in FinalizeOrderModal:**\n```py\n{e}\n```\nTell the admin to check the logs!")
 
 # ==========================================
 # CART SYSTEM MODAL & VIEW
@@ -670,58 +612,60 @@ class CartCheckoutModal(discord.ui.Modal, title="Checkout Cart"):
     notes = discord.ui.TextInput(label="Special Requests / Exceptions", style=discord.TextStyle.paragraph, required=False)
 
     async def on_submit(self, interaction: discord.Interaction):
-        await interaction.response.edit_message(content="⏳ Assembling your cart and pushing to logistics...", embed=None, view=None)
+        await interaction.response.send_message("⏳ **Assembling your cart and pushing to logistics...**", ephemeral=True)
 
-        user_data = USER_CARTS.get(interaction.user.id, {})
-        cart_items = user_data.get("items", [])
-        
-        if not cart_items:
-            await interaction.edit_original_response(content="Your cart is empty!")
-            return
+        try:
+            user_data = USER_CARTS.get(interaction.user.id, {})
+            cart_items = user_data.get("items", [])
+            
+            if not cart_items:
+                await interaction.edit_original_response(content="❌ Your cart is empty!")
+                return
 
-        items_summary_list = []
-        tc_payload = []
-        for item in cart_items:
-            items_summary_list.append(f"• **{item['qty']}x** {item['name']}")
-            if item['id'] is not None:
-                tc_payload.append((item['id'], item['qty']))
+            items_summary_list = []
+            tc_payload = []
+            for item in cart_items:
+                items_summary_list.append(f"• **{item['qty']}x** {item['name']}")
+                if item['id'] is not None: tc_payload.append((item['id'], item['qty']))
 
-        items_summary_str = "\n".join(items_summary_list)
-        tc_url = generate_teamcraft_url(tc_payload) if tc_payload else None
+            items_summary_str = "\n".join(items_summary_list)
+            tc_url = generate_teamcraft_url(tc_payload) if tc_payload else None
 
-        guild = interaction.guild
-        active_orders_channel = discord.utils.get(guild.text_channels, name="open-orders")
-        if not active_orders_channel:
-            active_orders_channel = await guild.create_text_channel("open-orders")
+            guild = interaction.guild
+            active_orders_channel = discord.utils.get(guild.text_channels, name="open-orders")
+            if not active_orders_channel: active_orders_channel = await guild.create_text_channel("open-orders")
 
-        embed = discord.Embed(title="🆕 Custom Cart Order", color=discord.Color.blue())
-        embed.add_field(name="Recipient Target", value=self.recipient.value, inline=False)
-        embed.add_field(name="Requested Items", value=items_summary_str, inline=False)
-        embed.add_field(name="Requested By", value=interaction.user.mention, inline=True)
-        if tc_url:
-            embed.add_field(name="Teamcraft Link", value=f"[🛠️ Open Recipe List]({tc_url})", inline=False)
-        if self.notes.value:
-            embed.add_field(name="📝 Special Notes", value=self.notes.value, inline=False)
+            embed = discord.Embed(title="🆕 Custom Cart Order", color=discord.Color.blue())
+            embed.add_field(name="Recipient Target", value=self.recipient.value, inline=False)
+            embed.add_field(name="Requested Items", value=items_summary_str, inline=False)
+            embed.add_field(name="Requested By", value=interaction.user.mention, inline=True)
+            if tc_url: embed.add_field(name="Teamcraft Link", value=f"[🛠️ Open Recipe List]({tc_url})", inline=False)
+            if self.notes.value: embed.add_field(name="📝 Special Notes", value=self.notes.value, inline=False)
 
-        root_msg = await active_orders_channel.send(embed=embed)
-        thread = await root_msg.create_thread(name=f"Order - {self.recipient.value[:20]}")
-        control_msg = await thread.send("Use the dashboard below to coordinate this craft.", view=OrderControlView())
+            root_msg = await active_orders_channel.send(embed=embed)
+            thread = await root_msg.create_thread(name=f"Order - {self.recipient.value[:20]}")
+            control_msg = await thread.send("Use the dashboard below to coordinate this craft.", view=OrderControlView())
 
-        crafter_role = discord.utils.get(guild.roles, name=CRAFTER_ROLE_NAME)
-        role_ping = f"<@&{crafter_role.id}>" if crafter_role else ""
-        ping_msg = await thread.send(f"{interaction.user.mention} {role_ping}")
-        await ping_msg.delete()
+            crafter_role = discord.utils.get(guild.roles, name=CRAFTER_ROLE_NAME)
+            role_ping = f"<@&{crafter_role.id}>" if crafter_role else ""
+            ping_msg = await thread.send(f"{interaction.user.mention} {role_ping}")
+            await ping_msg.delete()
 
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO orders (control_message_id, root_message_id, requester_id, items_summary, recipient, tc_url) VALUES (?, ?, ?, ?, ?, ?)",
-                       (control_msg.id, root_msg.id, interaction.user.id, items_summary_str, self.recipient.value, tc_url))
-        conn.commit()
-        conn.close()
+            conn = sqlite3.connect(DB_PATH)
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO orders (control_message_id, root_message_id, requester_id, items_summary, recipient, tc_url) VALUES (?, ?, ?, ?, ?, ?)",
+                           (control_msg.id, root_msg.id, interaction.user.id, items_summary_str, self.recipient.value, tc_url))
+            conn.commit()
+            conn.close()
 
-        USER_CARTS.pop(interaction.user.id, None)
-        
-        await interaction.edit_original_response(content=f"✅ Cart successfully ordered to <#{active_orders_channel.id}>! You can now dismiss this message.")
+            USER_CARTS.pop(interaction.user.id, None)
+            
+            await interaction.edit_original_response(content=f"✅ **Cart successfully ordered to** <#{active_orders_channel.id}>! You can now dismiss this message.")
+            
+        except Exception as e:
+            error_trace = traceback.format_exc()
+            print(error_trace)
+            await interaction.edit_original_response(content=f"❌ **CRITICAL ERROR in CartCheckoutModal:**\n```py\n{e}\n```\nTell the admin to check the logs!")
 
 class CartView(discord.ui.View):
     def __init__(self):
@@ -1079,7 +1023,6 @@ async def item_autocomplete(interaction: discord.Interaction, current: str) -> l
 # ==========================================
 @bot.event
 async def on_command_error(ctx, error):
-    # This forces prefix command errors to print to your Railway console AND Discord chat
     print(f"⚠️ Command Error: {error}")
     try:
         await ctx.send(f"❌ **Error executing command:** {error}")
@@ -1089,14 +1032,12 @@ async def on_command_error(ctx, error):
 @bot.tree.command(name="ordersetup", description="Deploy the Hearthkeepers Order Board dashboard.")
 @app_commands.default_permissions(administrator=True)
 async def slash_ordersetup(interaction: discord.Interaction):
-    # Converted to a slash command so Discord natively handles the feedback UI
     await interaction.response.defer(ephemeral=True)
     
     try:
         guild = interaction.guild
         orders_channel = discord.utils.get(guild.text_channels, name="place-order")
         
-        # Check if the bot actually has permissions to create channels
         if not orders_channel:
             bot_member = guild.get_member(bot.user.id)
             if not bot_member.guild_permissions.manage_channels:
