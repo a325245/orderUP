@@ -689,6 +689,16 @@ class OrderControlView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        crafter_role = discord.utils.get(interaction.guild.roles, name=CRAFTER_ROLE_NAME)
+        is_admin = interaction.user.guild_permissions.administrator
+        
+        if (crafter_role in interaction.user.roles) or is_admin:
+            return True
+            
+        await interaction.response.send_message("❌ **Access Denied:** Only Hearthkeepers can use the coordination tools!", ephemeral=True)
+        return False
+
     @discord.ui.button(label="Claim Order 🛠️", style=discord.ButtonStyle.success, custom_id="claim_order")
     async def claim_order(self, interaction: discord.Interaction, button: discord.ui.Button):
         conn = sqlite3.connect(DB_PATH)
@@ -810,6 +820,16 @@ class OrderControlView(discord.ui.View):
 class ClosedOrderView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
+
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        crafter_role = discord.utils.get(interaction.guild.roles, name=CRAFTER_ROLE_NAME)
+        is_admin = interaction.user.guild_permissions.administrator
+        
+        if (crafter_role in interaction.user.roles) or is_admin:
+            return True
+            
+        await interaction.response.send_message("❌ **Access Denied:** Only Hearthkeepers can restore archived orders!", ephemeral=True)
+        return False
 
     @discord.ui.button(label="Restore Order ♻️", style=discord.ButtonStyle.secondary, custom_id="restore_order")
     async def restore_order(self, interaction: discord.Interaction, button: discord.ui.Button):
