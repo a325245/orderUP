@@ -17,7 +17,7 @@ load_dotenv()
 # Fallback Configuration Token Slot
 TOKEN = os.environ.get("DISCORD_TOKEN")
 if not TOKEN or TOKEN == "your_bot_token_here":
-    TOKEN = "for local testing only :3"
+    TOKEN = "YOUR_TOKEN_HERE"
 
 CRAFTER_ROLE_NAME = "Hearthkeepers"
 XIVAPI_BASE = "https://v2.xivapi.com/api"
@@ -1075,26 +1075,53 @@ async def item_autocomplete(interaction: discord.Interaction, current: str) -> l
     return list(choices.values())[:25]
 
 # ==========================================
-# SETUP COMMAND & STARTUP EVENT
+# ERROR HANDLER & SETUP COMMAND
 # ==========================================
-@bot.command(name="ordersetup")
-@commands.has_permissions(administrator=True)
-async def ordersetup(ctx):
-    guild = ctx.guild
-    orders_channel = discord.utils.get(guild.text_channels, name="place-order")
-    
-    if not orders_channel:
-        orders_channel = await guild.create_text_channel("place-order")
+@bot.event
+async def on_command_error(ctx, error):
+    # This forces prefix command errors to print to your Railway console AND Discord chat
+    print(f"⚠️ Command Error: {error}")
+    try:
+        await ctx.send(f"❌ **Error executing command:** {error}")
+    except discord.Forbidden:
+        print("⚠️ I don't even have permission to send the error message in that channel!")
 
-    embed = discord.Embed(
-        title=" 🛠️Hearthkeepers Order Board 🛠️",
-        description="Welcome to the Order Board! \n\nClick **Gearset Wizard** to configure standard tier gearsets with auto-calculated materials.\n\nClick **Items / Gear** to submit custom items or a Teamcraft link.\n\nYou may also use the **/order** command to build and submit a cart.",
-        color=discord.Color.purple()
-    )
+@bot.tree.command(name="ordersetup", description="Deploy the Hearthkeepers Order Board dashboard.")
+@app_commands.default_permissions(administrator=True)
+async def slash_ordersetup(interaction: discord.Interaction):
+    # Converted to a slash command so Discord natively handles the feedback UI
+    await interaction.response.defer(ephemeral=True)
     
-    await orders_channel.send(embed=embed, view=DashboardView())
-    await ctx.send(f"✅ Dashboard successfully placed down inside <#{orders_channel.id}>!")
+    try:
+        guild = interaction.guild
+        orders_channel = discord.utils.get(guild.text_channels, name="place-order")
+        
+        # Check if the bot actually has permissions to create channels
+        if not orders_channel:
+            bot_member = guild.get_member(bot.user.id)
+            if not bot_member.guild_permissions.manage_channels:
+                await interaction.followup.send("❌ **Error:** I do not have the 'Manage Channels' permission to create the #place-order channel!")
+                return
+            orders_channel = await guild.create_text_channel("place-order")
 
+        embed = discord.Embed(
+            title=" 🛠️Hearthkeepers Order Board 🛠️",
+            description="Welcome to the Order Board! \n\nClick **Gearset Wizard** to configure standard tier gearsets with auto-calculated materials.\n\nClick **Items / Gear** to submit custom items or a Teamcraft link.\n\nYou may also use the **/order** command to build and submit a cart.",
+            color=discord.Color.purple()
+        )
+        
+        await orders_channel.send(embed=embed, view=DashboardView())
+        await interaction.followup.send(f"✅ Dashboard successfully placed down inside <#{orders_channel.id}>!")
+        
+    except discord.Forbidden:
+        await interaction.followup.send("❌ **Permission Error:** Discord blocked me. Make sure my bot role is dragged high up in the Server Settings -> Roles list, and that I have 'Send Messages' and 'Embed Links' in the target channel.")
+    except Exception as e:
+        await interaction.followup.send(f"❌ **Unexpected Error:** `{e}`")
+        print(f"Setup Error: {e}")
+
+# ==========================================
+# STARTUP EVENT
+# ==========================================
 @bot.event
 async def on_ready():
     init_db()
